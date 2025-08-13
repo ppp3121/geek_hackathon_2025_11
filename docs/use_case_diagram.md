@@ -4,65 +4,71 @@ left to right direction
 
 actor User
 
-' === フロントエンド（操作とデータ定義） ===
-rectangle "フロントエンド" {
-    rectangle "ユースケース" {
-        User -- (検索元の位置を指定する)
+' === フロントエンド (Flutter) ===
+package "Flutterアプリ" {
+    rectangle "UI / View" {
+        usecase "地図操作と位置指定\n<size:10>OpenStreetMap (flutter_map)</size>" as MapInteraction
+        User -- MapInteraction
+
         User -- (カテゴリを指定する)
-        User -- (検索する)
-        User -- (検索結果を確認する)
         User -- (施設名を指定する)
-
-
-        (エラー通知を確認する) .> (検索する) : <<extend>>
-        note right of (エラー通知を確認する) {
-          - 検索結果が0件の場合
-          - 外部APIでエラーが発生した場合
-        }
+        User -- (検索実行)
+        User -- (検索結果を地図/リストで確認)
+        (エラー通知を確認する) .> (検索実行) : <<extend>>
+        note right of (エラー通知を確認する)
+         - 検索結果が0件の場合
+         - Firebase/外部APIでエラーが発生した場合
+        end note
     }
 
-    rectangle "検索結果キャッシュ" as Cache {
-        (カテゴリ別施設情報)
-         note as CacheNote
-        <b>キャッシュの利用フロー</b>
-        1. (カテゴリを指定する)時、まずキャッシュを確認。
-        2. キャッシュにデータがあれば、それを利用して表示。
-        3. なければ(検索する)をトリガーし、バックエンドへ問い合わせる。
-    end note
+    rectangle "状態管理 (Riverpod)" as Riverpod {
+        rectangle "検索条件Provider" as ConditionProvider
+        rectangle "検索結果キャッシュProvider" as CacheProvider
     }
+    MapInteraction -> ConditionProvider : (検索元の位置)
+    (カテゴリを指定する) -> ConditionProvider : (カテゴリ)
+    (施設名を指定する) -> ConditionProvider : (施設名)
 
-    rectangle "検索条件" {
-        (検索元の位置を指定する) -.-> (検索元の位置)
-        (検索元の位置を指定する) ..> Cache : <b>キャッシュを破棄</b>
-        note top on link: 検索位置が変更された場合
+    MapInteraction ..> CacheProvider : <b>キャッシュを破棄</b>
+    note top on link: 検索位置が変更された場合
 
-        (カテゴリを指定する) -.-> (カテゴリ)
-        (施設名を指定する) -.-> (施設名)
+    (検索実行) ..> Riverpod
+
+    (検索結果を地図/リストで確認) <.. CacheProvider : キャッシュされたデータを表示
+}
+
+
+' === バックエンド (Firebase) ===
+package "Firebase" {
+    rectangle "Cloud Functions" as Functions {
+        (施設情報検索)
     }
-
 }
 
-' === バックエンド ===
-rectangle "バックエンド"{
-    (検索する) --> (検索)
-    (検索条件) -.-> (検索):条件
+' === 外部API ===
+package "外部API" {
+    rectangle "Overpass API" as Overpass {
+        (施設検索\n<size:10>カテゴリ・位置フィルタ</size>)
+    }
+    rectangle "OSRM API" as OSRM {
+       (距離計算)
+    }
 }
 
-' === 外部API群 ===
-rectangle "地図系API" {
-    (検索) --> (条件を満たす施設の位置を取得)
-}
-rectangle "距離計算システム" {
-    (検索) --> (距離計算を行う)
-}
-rectangle "店舗情報API" {
-    (検索) --> (店舗情報を取得)
-}
 
-' === データフローの戻り ===
-rectangle "フロントエンド" {
-    Cache <-.. (検索) : 検索結果を追加
-    (検索結果を確認する) <.. Cache : キャッシュされたデータを表示
-}
+' === データフロー ===
+Riverpod --> (施設情報検索) : 検索条件を渡し、\nHTTPSリクエストでトリガー
+note on link
+  <b>キャッシュがない場合のみ実行</b>
+  1. カテゴリ指定時などにまずキャッシュ(CacheProvider)を確認
+  2. データがあればAPIコールは行わない
+end note
+
+
+(施設情報検索) --> Overpass : 施設の位置・情報をクエリ
+(施設情報検索) --> OSRM : 施設までの距離を計算
+
+(施設情報検索) ..> CacheProvider : 検索結果をJSONで返し、\nキャッシュを更新する
+
 @enduml
 ```
