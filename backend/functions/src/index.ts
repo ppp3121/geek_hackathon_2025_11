@@ -1,6 +1,6 @@
 import { onRequest } from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 
 // フロントエンドに返す施設のデータ構造をinterfaceで定義
 interface Facility {
@@ -78,9 +78,14 @@ export const searchFacilities = onRequest(
     const overpassUrl = "https://overpass-api.de/api/interpreter";
 
     try {
-      const apiResponse = await axios.post<OverpassResponse>(overpassUrl, query, {
-        headers: { "Content-Type": "text/plain" },
-      });
+      const apiResponse = await axios.post<OverpassResponse>(
+        overpassUrl,
+        query,
+        {
+          headers: { "Content-Type": "text/plain" },
+          timeout: 15000, // 15秒でタイムアウト
+        }
+      );
 
       // Overpass APIからのレスポンス(JSON)を使いやすいように整形
       const elements: OverpassElement[] = apiResponse.data.elements;
@@ -106,8 +111,38 @@ export const searchFacilities = onRequest(
       response.status(200).json(facilities);
 
     } catch (error) {
-      logger.error("Overpass API error:", error);
-      response.status(500).send("Error fetching data from Overpass API.");
+      // isAxiosErrorでaxiosからのエラーか判定
+      if (isAxiosError(error)) {
+        // タイムアウトの場合
+        if (error.code === 'ECONNABORTED') {
+          logger.error("Overpass API request timed out", { query });
+          response.status(504).json({ error: "検索サービスが時間内に応答しませんでした。少し時間を置いて再度お試しください。" });
+        }
+        // Overpass APIからエラーレスポンスが返ってきた場合
+        else if (error.response) {
+          logger.error("Overpass API returned an error", {
+            status: error.response.status,
+            data: error.response.data,
+            query,
+          });
+          // フロントエンドにはステータスコードに応じてメッセージを返す
+          if (error.response.status === 429) {
+            response.status(429).json({ error: "検索リクエストが集中しています。しばらくしてから再度お試しください。" });
+          } else {
+            response.status(502).json({ error: "施設情報の取得中にエラーが発生しました。" });
+          }
+        }
+        // リクエストはしたがレスポンスがない場合 (ネットワーク障害など)
+        else {
+          logger.error("Network error with Overpass API", { message: error.message, query });
+          response.status(503).json({ error: "検索サービスに接続できませんでした。" });
+        }
+      }
+      // axios以外の予期せぬエラー (データ整形中のバグなど)
+      else {
+        logger.error("An unexpected error occurred", error);
+        response.status(500).json({ error: "サーバー内部で予期せぬエラーが発生しました。" });
+      }
     }
   }
 );
