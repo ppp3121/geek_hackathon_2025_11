@@ -1,0 +1,7 @@
+# ESLintのチェックから除外するファイルやディレクトリ
+
+# コンパイル後のJavaScriptファイル
+lib/
+
+# ESLint自体の設定ファイル
+.eslintrc.js
