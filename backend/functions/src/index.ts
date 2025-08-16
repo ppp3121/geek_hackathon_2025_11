@@ -36,12 +36,18 @@ export const searchFacilities = onRequest(
   async (request, response) => {
     logger.info("Search request received", { structuredData: true });
 
-    // 1. クエリパラメータから緯度・経度・半径を取得
+    // クエリパラメータから緯度・経度・半径を取得
     const lat = request.query.lat as string;
     const lon = request.query.lon as string;
     const radius = (request.query.radius as string) || "1000"; // デフォルト半径1000m
 
-    // 2. パラメータのバリデーション
+    // "amenities" パラメータを受け取る。指定がなければデフォルト値を設定
+    const amenitiesQuery = (request.query.amenities as string) || "restaurant,cafe,convenience";
+    const amenityList = amenitiesQuery.split(',');
+
+    logger.info("Search parameters", { lat, lon, radius, amenities: amenityList });
+
+    // パラメータのバリデーション
     if (!lat || !lon) {
       logger.warn("Missing lat or lon parameter", { query: request.query });
       response.status(400).json({ error: "緯度(lat)と経度(lon)は必須です。" });
@@ -53,13 +59,18 @@ export const searchFacilities = onRequest(
       return;
     }
 
-    // 3. 受け取った値を使ってOverpassクエリを動的に生成
+    // amenityList配列を元に、Overpassクエリの検索部分を動的に生成
+    const searchStatements = amenityList.map(amenity => `
+      node["amenity"="${amenity.trim()}"](around:${radius},${lat},${lon});
+      way["amenity"="${amenity.trim()}"](around:${radius},${lat},${lon});
+      relation["amenity"="${amenity.trim()}"](around:${radius},${lat},${lon});
+    `).join('');
+
+    // 生成した検索部分をクエリに埋め込む
     const query = `
       [out:json];
       (
-        node["amenity"="cafe"](around:${radius},${lat},${lon});
-        way["amenity"="cafe"](around:${radius},${lat},${lon});
-        relation["amenity"="cafe"](around:${radius},${lat},${lon});
+        ${searchStatements}
       );
       out center;
     `;
@@ -71,7 +82,7 @@ export const searchFacilities = onRequest(
         headers: { "Content-Type": "text/plain" },
       });
 
-      // 4. Overpass APIからのレスポンス(JSON)を使いやすいように整形
+      // Overpass APIからのレスポンス(JSON)を使いやすいように整形
       const elements: OverpassElement[] = apiResponse.data.elements;
 
       const facilities: Facility[] = elements
@@ -91,7 +102,7 @@ export const searchFacilities = onRequest(
         });
 
       logger.info(`Successfully fetched and formatted ${facilities.length} facilities.`);
-      // 5. 整形したデータをレスポンスとして返す
+      // 整形したデータをレスポンスとして返す
       response.status(200).json(facilities);
 
     } catch (error) {
