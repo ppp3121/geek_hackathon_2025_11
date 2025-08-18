@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 import '../providers/search_condition_provider.dart';
+import '../providers/facility_cache_provider.dart';
 
 class MapWidget extends ConsumerStatefulWidget {
   const MapWidget({super.key});
@@ -29,6 +30,12 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
             ref
                 .read(searchConditionProvider.notifier)
                 .updateCenter(position.center);
+            
+            // キャッシュ管理：大きな位置変更の場合はキャッシュを破棄
+            final currentKey = ref.read(searchKeyProvider);
+            ref
+                .read(cacheManagerProvider.notifier)
+                .checkAndInvalidateCache(currentKey);
           }
         },
       ),

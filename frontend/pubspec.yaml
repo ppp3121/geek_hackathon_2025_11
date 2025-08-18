@@ -43,6 +43,9 @@ dependencies:
   
   # Location services
   latlong2: ^0.9.1
+  
+  # HTTP client
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:
