@@ -33,16 +33,57 @@ class FacilityService {
             .map((json) => Facility.fromJson(json as Map<String, dynamic>))
             .toList();
       } else {
+        // HTTPステータスコードに基づいてより詳細なエラーメッセージを提供
+        String userMessage = _getErrorMessageForStatusCode(response.statusCode);
         throw FacilityServiceException(
-          'Failed to fetch facilities: ${response.statusCode}',
+          userMessage,
           response.statusCode,
         );
       }
+    } on http.ClientException catch (e) {
+      // ネットワーク接続エラー
+      throw const FacilityServiceException(
+        'インターネット接続を確認してください',
+        null,
+      );
+    } on FormatException catch (e) {
+      // JSONデコードエラー
+      throw const FacilityServiceException(
+        'サーバーからの応答が不正です',
+        null,
+      );
+    } on FacilityServiceException {
+      // 既にFacilityServiceExceptionの場合はそのまま再スロー
+      rethrow;
     } catch (e) {
-      if (e is FacilityServiceException) {
-        rethrow;
-      }
-      throw FacilityServiceException('Network error: ${e.toString()}', null);
+      // その他の予期しないエラー
+      throw FacilityServiceException(
+        '予期しないエラーが発生しました: ${e.toString()}',
+        null,
+      );
+    }
+  }
+
+  static String _getErrorMessageForStatusCode(int statusCode) {
+    switch (statusCode) {
+      case 400:
+        return '検索条件が不正です。入力内容を確認してください';
+      case 401:
+        return '認証エラーが発生しました';
+      case 403:
+        return 'アクセスが拒否されました';
+      case 404:
+        return 'サービスが見つかりません';
+      case 429:
+        return '検索回数の上限に達しました。しばらく時間をおいてからお試しください';
+      case 500:
+        return 'サーバーエラーが発生しました。時間をおいて再度お試しください';
+      case 502:
+      case 503:
+      case 504:
+        return 'サーバーが一時的に利用できません。時間をおいて再度お試しください';
+      default:
+        return 'サーバーエラーが発生しました (エラーコード: $statusCode)';
     }
   }
 }

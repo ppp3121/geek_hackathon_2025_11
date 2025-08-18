@@ -31,36 +31,76 @@ class FacilityList extends ConsumerWidget {
               color: Colors.red,
             ),
             const SizedBox(height: 16),
-            Text(
-              '検索中にエラーが発生しました\n$error',
+            const Text(
+              '検索中にエラーが発生しました',
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.red),
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'エラーの詳細は通知をご確認ください',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 14,
+              ),
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
+            ElevatedButton.icon(
               onPressed: () {
                 ref.invalidate(currentFacilitiesProvider);
               },
-              child: const Text('再試行'),
+              icon: const Icon(Icons.refresh),
+              label: const Text('再試行'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+              ),
             ),
           ],
         ),
       ),
       data: (facilities) {
         if (facilities.isEmpty) {
-          return const Center(
+          return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.search_off,
-                  size: 48,
-                  color: Colors.grey,
+                  size: 64,
+                  color: Colors.grey[400],
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   '条件に一致する施設が見つかりませんでした',
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '検索条件を変更するか、\n別の場所で検索してみてください',
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    ref.invalidate(currentFacilitiesProvider);
+                  },
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('再検索'),
                 ),
               ],
             ),
