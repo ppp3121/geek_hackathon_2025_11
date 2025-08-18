@@ -5,22 +5,26 @@ class SearchCondition {
   final LatLng center;
   final double radius;
   final List<String> amenities;
+  final String facilityName;
 
   const SearchCondition({
     required this.center,
     this.radius = 1000.0,
     this.amenities = const ['restaurant', 'cafe', 'convenience'],
+    this.facilityName = '',
   });
 
   SearchCondition copyWith({
     LatLng? center,
     double? radius,
     List<String>? amenities,
+    String? facilityName,
   }) {
     return SearchCondition(
       center: center ?? this.center,
       radius: radius ?? this.radius,
       amenities: amenities ?? this.amenities,
+      facilityName: facilityName ?? this.facilityName,
     );
   }
 }
@@ -41,6 +45,10 @@ class SearchConditionNotifier extends StateNotifier<SearchCondition> {
 
   void updateAmenities(List<String> newAmenities) {
     state = state.copyWith(amenities: newAmenities);
+  }
+
+  void updateFacilityName(String newFacilityName) {
+    state = state.copyWith(facilityName: newFacilityName);
   }
 }
 

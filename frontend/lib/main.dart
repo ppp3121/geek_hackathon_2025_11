@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'widgets/map_widget.dart';
+import 'widgets/search_conditions_panel.dart';
 
 void main() {
   runApp(
@@ -36,7 +37,18 @@ class MyHomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('施設検索'),
       ),
-      body: const MapWidget(),
+      body: const Column(
+        children: [
+          Expanded(
+            flex: 2,
+            child: MapWidget(),
+          ),
+          Expanded(
+            flex: 1,
+            child: SearchConditionsPanel(),
+          ),
+        ],
+      ),
     );
   }
 }
