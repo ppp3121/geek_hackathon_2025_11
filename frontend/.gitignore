@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# 開発中のコードから秘密情報を漏らさないための処理
+.env
+env.g.dart

@@ -2,17 +2,16 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import '../models/facility.dart';
+import '../config/api_config.dart';
 
 class FacilityService {
-  static const String _baseUrl = 'https://YOUR_FIREBASE_FUNCTION_URL';
-
   static Future<List<Facility>> searchFacilities({
     required LatLng center,
     required double radius,
     required List<String> amenities,
     String? facilityName,
   }) async {
-    final uri = Uri.parse('$_baseUrl/searchFacilities').replace(
+    final uri = Uri.parse(ApiConfig.searchFacilitiesEndpoint).replace(
       queryParameters: {
         'lat': center.latitude.toString(),
         'lon': center.longitude.toString(),
@@ -24,12 +23,9 @@ class FacilityService {
     );
 
     try {
-      final response = await http.get(
-        uri,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ).timeout(const Duration(seconds: 30));
+      final response = await http
+          .get(uri, headers: {'Content-Type': 'application/json'})
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonList = json.decode(response.body) as List;
@@ -46,10 +42,7 @@ class FacilityService {
       if (e is FacilityServiceException) {
         rethrow;
       }
-      throw FacilityServiceException(
-        'Network error: ${e.toString()}',
-        null,
-      );
+      throw FacilityServiceException('Network error: ${e.toString()}', null);
     }
   }
 }

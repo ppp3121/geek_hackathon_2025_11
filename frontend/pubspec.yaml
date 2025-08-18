@@ -46,6 +46,9 @@ dependencies:
   
   # HTTP client
   http: ^1.2.2
+  
+  # Environment variables
+  envied: ^0.5.4+1
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +60,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  
+  # Environment variables code generation
+  envied_generator: ^0.5.4+1
+  build_runner: ^2.4.13
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
