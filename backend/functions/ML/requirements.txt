@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+gunicorn
+transformers
+huggingface-hub
+fugashi[unidic-lite]
+scikit-learn
+google-cloud-storage
