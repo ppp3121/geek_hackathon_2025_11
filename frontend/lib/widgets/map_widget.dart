@@ -15,6 +15,7 @@ class MapWidget extends ConsumerStatefulWidget {
 
 class _MapWidgetState extends ConsumerState<MapWidget> {
   final MapController _mapController = MapController();
+  List<Facility> _lastFacilities = [];
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +27,18 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
       options: MapOptions(
         initialCenter: searchCondition.center,
         initialZoom: 15.0,
+        onTap: (TapPosition tapPosition, LatLng point) {
+          // タップした位置を検索中心として設定
+          ref
+              .read(searchConditionProvider.notifier)
+              .updateCenter(point);
+        },
         onPositionChanged: (MapCamera position, bool hasGesture) {
           if (hasGesture) {
             // ユーザーの操作による位置変更の場合のみ、検索条件を更新
             ref
                 .read(searchConditionProvider.notifier)
                 .updateCenter(position.center);
-            
-            // キャッシュ管理：大きな位置変更の場合はキャッシュを破棄
-            final currentKey = ref.read(searchKeyProvider);
-            ref
-                .read(cacheManagerProvider.notifier)
-                .checkAndInvalidateCache(currentKey);
           }
         },
       ),
@@ -61,32 +62,88 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
             ),
             // 検索結果の施設マーカー
             ...facilitiesAsync.when(
-              data: (facilities) => facilities.map(
-                (facility) => Marker(
-                  point: LatLng(facility.lat, facility.lon),
-                  width: 30,
-                  height: 30,
-                  child: GestureDetector(
-                    onTap: () {
-                      _showFacilityInfo(context, facility);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _getCategoryColor(facility.category),
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child: Icon(
-                        _getCategoryIcon(facility.category),
-                        color: Colors.white,
-                        size: 16,
+              data: (facilities) {
+                // 新しい検索結果が得られたら保存
+                _lastFacilities = facilities;
+                return facilities.map(
+                  (facility) => Marker(
+                    point: LatLng(facility.lat, facility.lon),
+                    width: 30,
+                    height: 30,
+                    child: GestureDetector(
+                      onTap: () {
+                        _showFacilityInfo(context, facility);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _getCategoryColor(facility.category),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: Icon(
+                          _getCategoryIcon(facility.category),
+                          color: Colors.white,
+                          size: 16,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ).toList(),
-              loading: () => <Marker>[],
-              error: (_, __) => <Marker>[],
+                ).toList();
+              },
+              loading: () {
+                // 読み込み中は前回の結果を表示
+                return _lastFacilities.map(
+                  (facility) => Marker(
+                    point: LatLng(facility.lat, facility.lon),
+                    width: 30,
+                    height: 30,
+                    child: GestureDetector(
+                      onTap: () {
+                        _showFacilityInfo(context, facility);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _getCategoryColor(facility.category).withOpacity(0.7),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: Icon(
+                          _getCategoryIcon(facility.category),
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ).toList();
+              },
+              error: (_, __) {
+                // エラー時も前回の結果を表示
+                return _lastFacilities.map(
+                  (facility) => Marker(
+                    point: LatLng(facility.lat, facility.lon),
+                    width: 30,
+                    height: 30,
+                    child: GestureDetector(
+                      onTap: () {
+                        _showFacilityInfo(context, facility);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _getCategoryColor(facility.category),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: Icon(
+                          _getCategoryIcon(facility.category),
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ).toList();
+              },
             ),
           ],
         ),

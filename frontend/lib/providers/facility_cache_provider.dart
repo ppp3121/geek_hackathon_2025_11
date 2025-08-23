@@ -65,12 +65,20 @@ final searchKeyProvider = Provider<SearchKey>((ref) {
 
 final facilityCacheProvider = FutureProvider.family<List<Facility>, SearchKey>(
   (ref, searchKey) async {
-    return FacilityService.searchFacilities(
+    final cacheManager = ref.read(cacheManagerProvider.notifier);
+    
+    // 新しい検索を実行
+    final result = await FacilityService.searchFacilities(
       center: searchKey.center,
       radius: searchKey.radius,
       amenities: searchKey.amenities,
       facilityName: searchKey.facilityName.isNotEmpty ? searchKey.facilityName : null,
     );
+    
+    // 検索成功後にキャッシュクリア判定を実行
+    cacheManager.checkAndInvalidateCache(searchKey);
+    
+    return result;
   },
 );
 
@@ -89,8 +97,10 @@ class CacheManager extends StateNotifier<SearchKey?> {
     if (_lastKey != null) {
       final distance = currentKey.distanceFrom(_lastKey!);
       
+      // 500m以上離れた場合、古いキャッシュを無効化
       if (distance > 500) {
-        ref.invalidate(facilityCacheProvider);
+        // 新しい検索が成功したので、古い結果のキャッシュをクリア
+        ref.invalidate(facilityCacheProvider(_lastKey!));
       }
     }
     
