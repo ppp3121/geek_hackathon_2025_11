@@ -33,14 +33,6 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
               .read(searchConditionProvider.notifier)
               .updateCenter(point);
         },
-        onPositionChanged: (MapCamera position, bool hasGesture) {
-          if (hasGesture) {
-            // ユーザーの操作による位置変更の場合のみ、検索条件を更新
-            ref
-                .read(searchConditionProvider.notifier)
-                .updateCenter(position.center);
-          }
-        },
       ),
       children: [
         TileLayer(
