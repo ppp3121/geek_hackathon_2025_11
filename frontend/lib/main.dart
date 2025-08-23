@@ -55,10 +55,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return ErrorHandler(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text('施設検索'),
-        ),
         body: Column(
           children: [
             const Expanded(
