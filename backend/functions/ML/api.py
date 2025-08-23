@@ -6,9 +6,10 @@ from pathlib import Path
 import threading
 import os
 import joblib
-from google.cloud import storage
+
 from dict_matcher import match_query_or_none
 from train_synonym_normalizer import OUT_MODEL
+# keep normalize_query import for backward compatibility but it will not be used as primary
 from ML.synonym_normalizer import normalize_query
 
 app = FastAPI(title="OSM Tagging ML API (MVP)")
@@ -35,10 +36,6 @@ class TrainReq(BaseModel):
     max_count: int = 20
     epochs: int = 3
 
-
-def load_pipeline(model_dir: Optional[str] = None):
-    # Transformer pipeline はこの API のフローから外したため未実装
-    raise NotImplementedError("Transformer pipeline removed from this API")
 
 @app.on_event("startup")
 def startup():
@@ -91,35 +88,51 @@ def status():
 
 
 @app.post("/api/v1/analyze-keywords")
-def analyze(req: Query):
+def analyze(req: BaseModel):
     """
-    辞書優先 → 同義語正規化器（normalizer）で正規化 → 正規形で辞書検索
-    どれもヒットしなければ ML_SPEC.md に合わせて 400 を返す
+    フロー:
+    1) 辞書優先でタグを返す
+    2) 辞書に無ければ HF finetuned モデルで予測（正規化器の代替）
+       → 予測ラベルで辞書を引いてタグ返却
+    3) それでも無ければ 400 を返す
     """
-    q = (req.query or "").strip()
+    # req が pydantic BaseModel サブクラスである前提
+    q = getattr(req, "query", "") or ""
+    q = q.strip()
     if not q:
         return JSONResponse(status_code=400, content={"error": {"code": 400, "message": "解析不能なキーワードです。"}})
 
     # 1) 辞書優先
-    dict_res = match_query_or_none(q.query, top_k=2)
+    dict_res = match_query_or_none(q, top_k=2)
     if dict_res:
         return {"searchTerms": dict_res}
 
-    # 2) 同義語正規化モジュールを使う（辞書優先のあと）
-    # optional min_confidence can be set by env var MIN_CONFIDENCE
-    min_conf = os.environ.get("MIN_CONFIDENCE")
-    min_conf_val = float(min_conf) if min_conf is not None else None
+    # 2) 同義語正規化器の代わりに HF モデルで予測し、その予測語で辞書を検索する
     try:
-        normalized = normalize_query(q.query, min_confidence=min_conf_val)
+        hf_res = predict_with_hf(q, top_k=3)
+        if hf_res:
+            for pred in hf_res:
+                # pred は {'label': '...', 'score': ...}
+                label_text = pred.get("label") if isinstance(pred, dict) else str(pred)
+                if not label_text:
+                    continue
+                # ラベルが "LABEL_0" のような形式なら id2label マップが必要（別途実装可）
+                dict_res2 = match_query_or_none(label_text, top_k=2)
+                if dict_res2:
+                    return {"searchTerms": dict_res2, "predicted_label": label_text, "score": pred.get("score")}
+    except Exception as e:
+        print("HF model inference failed:", e)
+
+    # 3) 最後の手段: 既存の normalize_query を試す（互換性保持）
+    try:
+        normalized = normalize_query(q)
+        if normalized:
+            dict_res3 = match_query_or_none(normalized, top_k=2)
+            if dict_res3:
+                return {"searchTerms": dict_res3, "normalized": normalized}
     except Exception:
-        normalized = None
+        pass
 
-    if normalized:
-        dict_res2 = match_query_or_none(normalized, top_k=2)
-        if dict_res2:
-            return {"searchTerms": dict_res2}
-
-    # 3) どれもヒットしなかった -> ML_SPEC.md に合わせて 400 を返す
     return JSONResponse(status_code=400, content={"error": {"code": 400, "message": "解析不能なキーワードです。"}})
 
 
