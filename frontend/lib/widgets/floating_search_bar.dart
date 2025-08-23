@@ -4,11 +4,7 @@ class FloatingSearchBar extends StatefulWidget {
   final Function(String) onSearch;
   final VoidCallback? onClear;
 
-  const FloatingSearchBar({
-    super.key,
-    required this.onSearch,
-    this.onClear,
-  });
+  const FloatingSearchBar({super.key, required this.onSearch, this.onClear});
 
   @override
   State<FloatingSearchBar> createState() => _FloatingSearchBarState();
@@ -58,11 +54,7 @@ class _FloatingSearchBarState extends State<FloatingSearchBar> {
         children: [
           const Padding(
             padding: EdgeInsets.all(12),
-            child: Icon(
-              Icons.search,
-              color: Colors.grey,
-              size: 24,
-            ),
+            child: Icon(Icons.search, color: Colors.grey, size: 24),
           ),
           Expanded(
             child: TextField(
@@ -74,7 +66,7 @@ class _FloatingSearchBarState extends State<FloatingSearchBar> {
               },
               onSubmitted: (_) => _performSearch(),
               decoration: const InputDecoration(
-                hintText: '自然言語で施設を検索（例：美味しいラーメン店）',
+                // hintText: '自然言語で施設を検索（例：美味しいラーメン店）',
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(vertical: 12),
               ),
@@ -84,11 +76,7 @@ class _FloatingSearchBarState extends State<FloatingSearchBar> {
           if (_controller.text.isNotEmpty || _isExpanded) ...[
             IconButton(
               onPressed: _clearSearch,
-              icon: const Icon(
-                Icons.clear,
-                color: Colors.grey,
-                size: 20,
-              ),
+              icon: const Icon(Icons.clear, color: Colors.grey, size: 20),
             ),
           ],
           Container(
