@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'widgets/map_widget.dart';
-import 'widgets/search_conditions_panel.dart';
 import 'widgets/facility_list.dart';
 import 'widgets/error_handler.dart';
+import 'widgets/floating_search_bar.dart';
+import 'widgets/collapsible_category_selector.dart';
 
 void main() {
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -36,63 +33,105 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  late TabController _tabController;
+class _MyHomePageState extends State<MyHomePage> {
+  List<String> _selectedCategories = ['restaurant', 'cafe', 'convenience'];
+  String? _highlightedFacilityId;
 
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+  void _handleSearch(String query) {
+    // TODO: 自然言語検索の実装
+    print('検索クエリ: $query');
+    print('選択されたカテゴリ: $_selectedCategories');
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  void _handleClearSearch() {
+    // TODO: 検索結果のクリア
+    print('検索をクリア');
+  }
+
+  void _handleCategoriesChanged(List<String> categories) {
+    setState(() {
+      _selectedCategories = categories;
+    });
+    print('カテゴリが変更されました: $categories');
+  }
+
+  void _handleFacilityTapped(String facilityId) {
+    setState(() {
+      _highlightedFacilityId = facilityId;
+    });
+    print('施設がタップされました: $facilityId');
+
+    // ハイライトを一定時間後にクリア
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          _highlightedFacilityId = null;
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return ErrorHandler(
       child: Scaffold(
-        body: Column(
+        body: Stack(
           children: [
-            const Expanded(
-              flex: 2,
-              child: MapWidget(),
+            Column(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: MapWidget(onFacilityTapped: _handleFacilityTapped),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 4,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.list, color: Colors.grey),
+                      SizedBox(width: 8),
+                      Text(
+                        '検索結果',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: FacilityList(
+                    highlightedFacilityId: _highlightedFacilityId,
+                  ),
+                ),
+              ],
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, -2),
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 10,
+              left: 0,
+              right: 0,
+              child: Column(
+                children: [
+                  FloatingSearchBar(
+                    onSearch: _handleSearch,
+                    onClear: _handleClearSearch,
                   ),
-                ],
-              ),
-              child: TabBar(
-                controller: _tabController,
-                tabs: const [
-                  Tab(
-                    icon: Icon(Icons.search),
-                    text: '検索条件',
+                  CollapsibleCategorySelector(
+                    selectedCategories: _selectedCategories,
+                    onCategoriesChanged: _handleCategoriesChanged,
                   ),
-                  Tab(
-                    icon: Icon(Icons.list),
-                    text: '検索結果',
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: TabBarView(
-                controller: _tabController,
-                children: const [
-                  SearchConditionsPanel(),
-                  FacilityList(),
                 ],
               ),
             ),

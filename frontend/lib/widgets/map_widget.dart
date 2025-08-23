@@ -8,7 +8,9 @@ import '../models/facility.dart';
 import '../utils/map_tiles.dart';
 
 class MapWidget extends ConsumerStatefulWidget {
-  const MapWidget({super.key});
+  final Function(String facilityId)? onFacilityTapped;
+
+  const MapWidget({super.key, this.onFacilityTapped});
 
   @override
   ConsumerState<MapWidget> createState() => _MapWidgetState();
@@ -30,9 +32,7 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
         initialZoom: 15.0,
         onTap: (TapPosition tapPosition, LatLng point) {
           // タップした位置を検索中心として設定
-          ref
-              .read(searchConditionProvider.notifier)
-              .updateCenter(point);
+          ref.read(searchConditionProvider.notifier).updateCenter(point);
         },
       ),
       children: [
@@ -59,84 +59,104 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
               data: (facilities) {
                 // 新しい検索結果が得られたら保存
                 _lastFacilities = facilities;
-                return facilities.map(
-                  (facility) => Marker(
-                    point: LatLng(facility.lat, facility.lon),
-                    width: 30,
-                    height: 30,
-                    child: GestureDetector(
-                      onTap: () {
-                        _showFacilityInfo(context, facility);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: _getCategoryColor(facility.category),
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
-                        child: Icon(
-                          _getCategoryIcon(facility.category),
-                          color: Colors.white,
-                          size: 16,
+                return facilities
+                    .map(
+                      (facility) => Marker(
+                        point: LatLng(facility.lat, facility.lon),
+                        width: 30,
+                        height: 30,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (widget.onFacilityTapped != null) {
+                              widget.onFacilityTapped!(facility.id.toString());
+                            } else {
+                              _showFacilityInfo(context, facility);
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: _getCategoryColor(facility.category),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: Icon(
+                              _getCategoryIcon(facility.category),
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ).toList();
+                    )
+                    .toList();
               },
               loading: () {
                 // 読み込み中は前回の結果を表示
-                return _lastFacilities.map(
-                  (facility) => Marker(
-                    point: LatLng(facility.lat, facility.lon),
-                    width: 30,
-                    height: 30,
-                    child: GestureDetector(
-                      onTap: () {
-                        _showFacilityInfo(context, facility);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: _getCategoryColor(facility.category).withOpacity(0.7),
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
-                        child: Icon(
-                          _getCategoryIcon(facility.category),
-                          color: Colors.white,
-                          size: 16,
+                return _lastFacilities
+                    .map(
+                      (facility) => Marker(
+                        point: LatLng(facility.lat, facility.lon),
+                        width: 30,
+                        height: 30,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (widget.onFacilityTapped != null) {
+                              widget.onFacilityTapped!(facility.id.toString());
+                            } else {
+                              _showFacilityInfo(context, facility);
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: _getCategoryColor(
+                                facility.category,
+                              ).withOpacity(0.7),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: Icon(
+                              _getCategoryIcon(facility.category),
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ).toList();
+                    )
+                    .toList();
               },
               error: (_, __) {
                 // エラー時も前回の結果を表示
-                return _lastFacilities.map(
-                  (facility) => Marker(
-                    point: LatLng(facility.lat, facility.lon),
-                    width: 30,
-                    height: 30,
-                    child: GestureDetector(
-                      onTap: () {
-                        _showFacilityInfo(context, facility);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: _getCategoryColor(facility.category),
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
-                        child: Icon(
-                          _getCategoryIcon(facility.category),
-                          color: Colors.white,
-                          size: 16,
+                return _lastFacilities
+                    .map(
+                      (facility) => Marker(
+                        point: LatLng(facility.lat, facility.lon),
+                        width: 30,
+                        height: 30,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (widget.onFacilityTapped != null) {
+                              widget.onFacilityTapped!(facility.id.toString());
+                            } else {
+                              _showFacilityInfo(context, facility);
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: _getCategoryColor(facility.category),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                            child: Icon(
+                              _getCategoryIcon(facility.category),
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ).toList();
+                    )
+                    .toList();
               },
             ),
           ],

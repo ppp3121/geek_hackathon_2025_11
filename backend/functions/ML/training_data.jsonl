@@ -1,0 +1,368 @@
+{"text": "カフェ", "tags": [{"key": "amenity", "value": "cafe"}]}
+{"text": "カフェありますか", "tags": [{"key": "amenity", "value": "cafe"}]}
+{"text": "カフェはどこ", "tags": [{"key": "amenity", "value": "cafe"}]}
+{"text": "近くのカフェ", "tags": [{"key": "amenity", "value": "cafe"}]}
+{"text": "レストラン", "tags": [{"key": "amenity", "value": "restaurant"}]}
+{"text": "レストランの近く", "tags": [{"key": "amenity", "value": "restaurant"}]}
+{"text": "レストランはどこ", "tags": [{"key": "amenity", "value": "restaurant"}]}
+{"text": "近くのレストラン", "tags": [{"key": "amenity", "value": "restaurant"}]}
+{"text": "コンビニ", "tags": [{"key": "amenity", "value": "convenience"}]}
+{"text": "コンビニありますか", "tags": [{"key": "amenity", "value": "convenience"}]}
+{"text": "コンビニを探している", "tags": [{"key": "amenity", "value": "convenience"}]}
+{"text": "近くのコンビニ", "tags": [{"key": "amenity", "value": "convenience"}]}
+{"text": "スーパーマーケット", "tags": [{"key": "shop", "value": "supermarket"}]}
+{"text": "スーパーマーケットの場所", "tags": [{"key": "shop", "value": "supermarket"}]}
+{"text": "スーパーマーケットはどこ", "tags": [{"key": "shop", "value": "supermarket"}]}
+{"text": "近くのスーパーマーケット", "tags": [{"key": "shop", "value": "supermarket"}]}
+{"text": "デパート", "tags": [{"key": "shop", "value": "department_store"}]}
+{"text": "デパートの近く", "tags": [{"key": "shop", "value": "department_store"}]}
+{"text": "デパートはどこ", "tags": [{"key": "shop", "value": "department_store"}]}
+{"text": "近くのデパート", "tags": [{"key": "shop", "value": "department_store"}]}
+{"text": "ラーメン", "tags": [{"key": "amenity", "value": "ramen"}]}
+{"text": "ラーメンの近く", "tags": [{"key": "amenity", "value": "ramen"}]}
+{"text": "ラーメン付近の", "tags": [{"key": "amenity", "value": "ramen"}]}
+{"text": "近くのラーメン", "tags": [{"key": "amenity", "value": "ramen"}]}
+{"text": "うどん", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "udon"}]}
+{"text": "うどんはどこ", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "udon"}]}
+{"text": "うどんを探している", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "udon"}]}
+{"text": "近くのうどん", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "udon"}]}
+{"text": "そば", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "soba"}]}
+{"text": "そばありますか", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "soba"}]}
+{"text": "そばの場所", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "soba"}]}
+{"text": "近くのそば", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "soba"}]}
+{"text": "寿司", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "sushi"}]}
+{"text": "寿司の近く", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "sushi"}]}
+{"text": "寿司付近の", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "sushi"}]}
+{"text": "近くの寿司", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "sushi"}]}
+{"text": "焼肉", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "yakiniku"}]}
+{"text": "焼肉の場所", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "yakiniku"}]}
+{"text": "焼肉はどこ", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "yakiniku"}]}
+{"text": "近くの焼肉", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "yakiniku"}]}
+{"text": "焼き鳥", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "yakitori"}]}
+{"text": "焼き鳥の場所", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "yakitori"}]}
+{"text": "焼き鳥付近の", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "yakitori"}]}
+{"text": "近くの焼き鳥", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "yakitori"}]}
+{"text": "天ぷら", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "tempura"}]}
+{"text": "天ぷらありますか", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "tempura"}]}
+{"text": "天ぷらを探している", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "tempura"}]}
+{"text": "近くの天ぷら", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "tempura"}]}
+{"text": "とんかつ", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "tonkatsu"}]}
+{"text": "とんかつの近く", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "tonkatsu"}]}
+{"text": "とんかつはどこ", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "tonkatsu"}]}
+{"text": "近くのとんかつ", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "tonkatsu"}]}
+{"text": "丼物", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "donburi"}]}
+{"text": "丼物はどこ", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "donburi"}]}
+{"text": "丼物付近の", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "donburi"}]}
+{"text": "近くの丼物", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "donburi"}]}
+{"text": "お好み焼き", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "okonomiyaki"}]}
+{"text": "お好み焼きの場所", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "okonomiyaki"}]}
+{"text": "お好み焼きはどこ", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "okonomiyaki"}]}
+{"text": "近くのお好み焼き", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "okonomiyaki"}]}
+{"text": "ピザ", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "pizza"}]}
+{"text": "ピザの場所", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "pizza"}]}
+{"text": "ピザはどこ", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "pizza"}]}
+{"text": "近くのピザ", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "pizza"}]}
+{"text": "カレー", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "curry"}]}
+{"text": "カレーを探している", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "curry"}]}
+{"text": "カレー付近の", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "curry"}]}
+{"text": "近くのカレー", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "curry"}]}
+{"text": "ハンバーガー", "tags": [{"key": "amenity", "value": "fast_food"}, {"key": "cuisine", "value": "burger"}]}
+{"text": "ハンバーガーありますか", "tags": [{"key": "amenity", "value": "fast_food"}, {"key": "cuisine", "value": "burger"}]}
+{"text": "ハンバーガーの近く", "tags": [{"key": "amenity", "value": "fast_food"}, {"key": "cuisine", "value": "burger"}]}
+{"text": "近くのハンバーガー", "tags": [{"key": "amenity", "value": "fast_food"}, {"key": "cuisine", "value": "burger"}]}
+{"text": "中華料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "chinese"}]}
+{"text": "中華料理の近く", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "chinese"}]}
+{"text": "中華料理付近の", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "chinese"}]}
+{"text": "近くの中華料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "chinese"}]}
+{"text": "近くの韓国料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "korean"}]}
+{"text": "韓国料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "korean"}]}
+{"text": "韓国料理ありますか", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "korean"}]}
+{"text": "韓国料理の近く", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "korean"}]}
+{"text": "タイ料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "thai"}]}
+{"text": "タイ料理ありますか", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "thai"}]}
+{"text": "タイ料理の場所", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "thai"}]}
+{"text": "近くのタイ料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "thai"}]}
+{"text": "ベトナム料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "vietnamese"}]}
+{"text": "ベトナム料理の場所", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "vietnamese"}]}
+{"text": "ベトナム料理を探している", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "vietnamese"}]}
+{"text": "近くのベトナム料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "vietnamese"}]}
+{"text": "インド料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "indian"}]}
+{"text": "インド料理はどこ", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "indian"}]}
+{"text": "インド料理を探している", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "indian"}]}
+{"text": "近くのインド料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "indian"}]}
+{"text": "スペイン料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "spanish"}]}
+{"text": "スペイン料理の場所", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "spanish"}]}
+{"text": "スペイン料理の近く", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "spanish"}]}
+{"text": "近くのスペイン料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "spanish"}]}
+{"text": "メキシコ料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "mexican"}]}
+{"text": "メキシコ料理の近く", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "mexican"}]}
+{"text": "メキシコ料理を探している", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "mexican"}]}
+{"text": "近くのメキシコ料理", "tags": [{"key": "amenity", "value": "restaurant"}, {"key": "cuisine", "value": "mexican"}]}
+{"text": "居酒屋", "tags": [{"key": "amenity", "value": "bar"}]}
+{"text": "居酒屋ありますか", "tags": [{"key": "amenity", "value": "bar"}]}
+{"text": "居酒屋付近の", "tags": [{"key": "amenity", "value": "bar"}]}
+{"text": "近くの居酒屋", "tags": [{"key": "amenity", "value": "bar"}]}
+{"text": "バー", "tags": [{"key": "amenity", "value": "bar"}]}
+{"text": "バーはどこ", "tags": [{"key": "amenity", "value": "bar"}]}
+{"text": "バー付近の", "tags": [{"key": "amenity", "value": "bar"}]}
+{"text": "近くのバー", "tags": [{"key": "amenity", "value": "bar"}]}
+{"text": "パブ", "tags": [{"key": "amenity", "value": "pub"}]}
+{"text": "パブの場所", "tags": [{"key": "amenity", "value": "pub"}]}
+{"text": "パブの近く", "tags": [{"key": "amenity", "value": "pub"}]}
+{"text": "近くのパブ", "tags": [{"key": "amenity", "value": "pub"}]}
+{"text": "パン屋", "tags": [{"key": "shop", "value": "bakery"}]}
+{"text": "パン屋の近く", "tags": [{"key": "shop", "value": "bakery"}]}
+{"text": "パン屋付近の", "tags": [{"key": "shop", "value": "bakery"}]}
+{"text": "近くのパン屋", "tags": [{"key": "shop", "value": "bakery"}]}
+{"text": "ケーキ屋", "tags": [{"key": "shop", "value": "pastry"}]}
+{"text": "ケーキ屋の場所", "tags": [{"key": "shop", "value": "pastry"}]}
+{"text": "ケーキ屋を探している", "tags": [{"key": "shop", "value": "pastry"}]}
+{"text": "近くのケーキ屋", "tags": [{"key": "shop", "value": "pastry"}]}
+{"text": "和菓子屋", "tags": [{"key": "shop", "value": "confectionery"}]}
+{"text": "和菓子屋を探している", "tags": [{"key": "shop", "value": "confectionery"}]}
+{"text": "和菓子屋付近の", "tags": [{"key": "shop", "value": "confectionery"}]}
+{"text": "近くの和菓子屋", "tags": [{"key": "shop", "value": "confectionery"}]}
+{"text": "近くの酒店", "tags": [{"key": "shop", "value": "alcohol"}]}
+{"text": "酒店", "tags": [{"key": "shop", "value": "alcohol"}]}
+{"text": "酒店ありますか", "tags": [{"key": "shop", "value": "alcohol"}]}
+{"text": "酒店の近く", "tags": [{"key": "shop", "value": "alcohol"}]}
+{"text": "お茶屋", "tags": [{"key": "shop", "value": "tea"}]}
+{"text": "お茶屋ありますか", "tags": [{"key": "shop", "value": "tea"}]}
+{"text": "お茶屋付近の", "tags": [{"key": "shop", "value": "tea"}]}
+{"text": "近くのお茶屋", "tags": [{"key": "shop", "value": "tea"}]}
+{"text": "精肉店", "tags": [{"key": "shop", "value": "butcher"}]}
+{"text": "精肉店を探している", "tags": [{"key": "shop", "value": "butcher"}]}
+{"text": "精肉店付近の", "tags": [{"key": "shop", "value": "butcher"}]}
+{"text": "近くの精肉店", "tags": [{"key": "shop", "value": "butcher"}]}
+{"text": "近くの鮮魚店", "tags": [{"key": "shop", "value": "seafood"}]}
+{"text": "鮮魚店", "tags": [{"key": "shop", "value": "seafood"}]}
+{"text": "鮮魚店の場所", "tags": [{"key": "shop", "value": "seafood"}]}
+{"text": "鮮魚店の近く", "tags": [{"key": "shop", "value": "seafood"}]}
+{"text": "八百屋", "tags": [{"key": "shop", "value": "greengrocer"}]}
+{"text": "八百屋の近く", "tags": [{"key": "shop", "value": "greengrocer"}]}
+{"text": "八百屋付近の", "tags": [{"key": "shop", "value": "greengrocer"}]}
+{"text": "近くの八百屋", "tags": [{"key": "shop", "value": "greengrocer"}]}
+{"text": "本屋", "tags": [{"key": "shop", "value": "books"}]}
+{"text": "本屋ありますか", "tags": [{"key": "shop", "value": "books"}]}
+{"text": "本屋付近の", "tags": [{"key": "shop", "value": "books"}]}
+{"text": "近くの本屋", "tags": [{"key": "shop", "value": "books"}]}
+{"text": "文房具店", "tags": [{"key": "shop", "value": "stationery"}]}
+{"text": "文房具店ありますか", "tags": [{"key": "shop", "value": "stationery"}]}
+{"text": "文房具店の近く", "tags": [{"key": "shop", "value": "stationery"}]}
+{"text": "近くの文房具店", "tags": [{"key": "shop", "value": "stationery"}]}
+{"text": "服屋", "tags": [{"key": "shop", "value": "clothes"}]}
+{"text": "服屋の近く", "tags": [{"key": "shop", "value": "clothes"}]}
+{"text": "服屋付近の", "tags": [{"key": "shop", "value": "clothes"}]}
+{"text": "近くの服屋", "tags": [{"key": "shop", "value": "clothes"}]}
+{"text": "近くの靴屋", "tags": [{"key": "shop", "value": "shoes"}]}
+{"text": "靴屋", "tags": [{"key": "shop", "value": "shoes"}]}
+{"text": "靴屋の場所", "tags": [{"key": "shop", "value": "shoes"}]}
+{"text": "靴屋はどこ", "tags": [{"key": "shop", "value": "shoes"}]}
+{"text": "近くの鞄屋", "tags": [{"key": "shop", "value": "bag"}]}
+{"text": "鞄屋", "tags": [{"key": "shop", "value": "bag"}]}
+{"text": "鞄屋の近く", "tags": [{"key": "shop", "value": "bag"}]}
+{"text": "鞄屋付近の", "tags": [{"key": "shop", "value": "bag"}]}
+{"text": "宝飾店", "tags": [{"key": "shop", "value": "jewelry"}]}
+{"text": "宝飾店ありますか", "tags": [{"key": "shop", "value": "jewelry"}]}
+{"text": "宝飾店を探している", "tags": [{"key": "shop", "value": "jewelry"}]}
+{"text": "近くの宝飾店", "tags": [{"key": "shop", "value": "jewelry"}]}
+{"text": "メガネ屋", "tags": [{"key": "shop", "value": "optician"}]}
+{"text": "メガネ屋ありますか", "tags": [{"key": "shop", "value": "optician"}]}
+{"text": "メガネ屋の近く", "tags": [{"key": "shop", "value": "optician"}]}
+{"text": "近くのメガネ屋", "tags": [{"key": "shop", "value": "optician"}]}
+{"text": "時計屋", "tags": [{"key": "shop", "value": "watches"}]}
+{"text": "時計屋の近く", "tags": [{"key": "shop", "value": "watches"}]}
+{"text": "時計屋はどこ", "tags": [{"key": "shop", "value": "watches"}]}
+{"text": "近くの時計屋", "tags": [{"key": "shop", "value": "watches"}]}
+{"text": "家具屋", "tags": [{"key": "shop", "value": "furniture"}]}
+{"text": "家具屋の場所", "tags": [{"key": "shop", "value": "furniture"}]}
+{"text": "家具屋を探している", "tags": [{"key": "shop", "value": "furniture"}]}
+{"text": "近くの家具屋", "tags": [{"key": "shop", "value": "furniture"}]}
+{"text": "近くの雑貨屋", "tags": [{"key": "shop", "value": "variety_store"}]}
+{"text": "雑貨屋", "tags": [{"key": "shop", "value": "variety_store"}]}
+{"text": "雑貨屋ありますか", "tags": [{"key": "shop", "value": "variety_store"}]}
+{"text": "雑貨屋はどこ", "tags": [{"key": "shop", "value": "variety_store"}]}
+{"text": "花屋", "tags": [{"key": "shop", "value": "florist"}]}
+{"text": "花屋ありますか", "tags": [{"key": "shop", "value": "florist"}]}
+{"text": "花屋付近の", "tags": [{"key": "shop", "value": "florist"}]}
+{"text": "近くの花屋", "tags": [{"key": "shop", "value": "florist"}]}
+{"text": "園芸店", "tags": [{"key": "shop", "value": "garden_centre"}]}
+{"text": "園芸店ありますか", "tags": [{"key": "shop", "value": "garden_centre"}]}
+{"text": "園芸店の近く", "tags": [{"key": "shop", "value": "garden_centre"}]}
+{"text": "近くの園芸店", "tags": [{"key": "shop", "value": "garden_centre"}]}
+{"text": "ホームセンター", "tags": [{"key": "shop", "value": "doityourself"}]}
+{"text": "ホームセンターありますか", "tags": [{"key": "shop", "value": "doityourself"}]}
+{"text": "ホームセンターの近く", "tags": [{"key": "shop", "value": "doityourself"}]}
+{"text": "近くのホームセンター", "tags": [{"key": "shop", "value": "doityourself"}]}
+{"text": "近くの金物屋", "tags": [{"key": "shop", "value": "hardware"}]}
+{"text": "金物屋", "tags": [{"key": "shop", "value": "hardware"}]}
+{"text": "金物屋はどこ", "tags": [{"key": "shop", "value": "hardware"}]}
+{"text": "金物屋付近の", "tags": [{"key": "shop", "value": "hardware"}]}
+{"text": "家電量販店", "tags": [{"key": "shop", "value": "electronics"}]}
+{"text": "家電量販店はどこ", "tags": [{"key": "shop", "value": "electronics"}]}
+{"text": "家電量販店付近の", "tags": [{"key": "shop", "value": "electronics"}]}
+{"text": "近くの家電量販店", "tags": [{"key": "shop", "value": "electronics"}]}
+{"text": "携帯ショップ", "tags": [{"key": "shop", "value": "mobile_phone"}]}
+{"text": "携帯ショップはどこ", "tags": [{"key": "shop", "value": "mobile_phone"}]}
+{"text": "携帯ショップ付近の", "tags": [{"key": "shop", "value": "mobile_phone"}]}
+{"text": "近くの携帯ショップ", "tags": [{"key": "shop", "value": "mobile_phone"}]}
+{"text": "ドラッグストア", "tags": [{"key": "shop", "value": "chemist"}]}
+{"text": "ドラッグストアありますか", "tags": [{"key": "shop", "value": "chemist"}]}
+{"text": "ドラッグストアはどこ", "tags": [{"key": "shop", "value": "chemist"}]}
+{"text": "近くのドラッグストア", "tags": [{"key": "shop", "value": "chemist"}]}
+{"text": "化粧品店", "tags": [{"key": "shop", "value": "cosmetics"}]}
+{"text": "化粧品店を探している", "tags": [{"key": "shop", "value": "cosmetics"}]}
+{"text": "化粧品店付近の", "tags": [{"key": "shop", "value": "cosmetics"}]}
+{"text": "近くの化粧品店", "tags": [{"key": "shop", "value": "cosmetics"}]}
+{"text": "おもちゃ屋", "tags": [{"key": "shop", "value": "toys"}]}
+{"text": "おもちゃ屋はどこ", "tags": [{"key": "shop", "value": "toys"}]}
+{"text": "おもちゃ屋付近の", "tags": [{"key": "shop", "value": "toys"}]}
+{"text": "近くのおもちゃ屋", "tags": [{"key": "shop", "value": "toys"}]}
+{"text": "ゲームセンター", "tags": [{"key": "leisure", "value": "amusement_arcade"}]}
+{"text": "ゲームセンターの場所", "tags": [{"key": "leisure", "value": "amusement_arcade"}]}
+{"text": "ゲームセンターの近く", "tags": [{"key": "leisure", "value": "amusement_arcade"}]}
+{"text": "近くのゲームセンター", "tags": [{"key": "leisure", "value": "amusement_arcade"}]}
+{"text": "スポーツ用品店", "tags": [{"key": "shop", "value": "sports"}]}
+{"text": "スポーツ用品店ありますか", "tags": [{"key": "shop", "value": "sports"}]}
+{"text": "スポーツ用品店の場所", "tags": [{"key": "shop", "value": "sports"}]}
+{"text": "近くのスポーツ用品店", "tags": [{"key": "shop", "value": "sports"}]}
+{"text": "自転車屋", "tags": [{"key": "shop", "value": "bicycle"}]}
+{"text": "自転車屋ありますか", "tags": [{"key": "shop", "value": "bicycle"}]}
+{"text": "自転車屋の近く", "tags": [{"key": "shop", "value": "bicycle"}]}
+{"text": "近くの自転車屋", "tags": [{"key": "shop", "value": "bicycle"}]}
+{"text": "ペットショップ", "tags": [{"key": "shop", "value": "pet"}]}
+{"text": "ペットショップの近く", "tags": [{"key": "shop", "value": "pet"}]}
+{"text": "ペットショップ付近の", "tags": [{"key": "shop", "value": "pet"}]}
+{"text": "近くのペットショップ", "tags": [{"key": "shop", "value": "pet"}]}
+{"text": "楽器店", "tags": [{"key": "shop", "value": "musical_instrument"}]}
+{"text": "楽器店はどこ", "tags": [{"key": "shop", "value": "musical_instrument"}]}
+{"text": "楽器店を探している", "tags": [{"key": "shop", "value": "musical_instrument"}]}
+{"text": "近くの楽器店", "tags": [{"key": "shop", "value": "musical_instrument"}]}
+{"text": "薬局", "tags": [{"key": "amenity", "value": "pharmacy"}]}
+{"text": "薬局はどこ", "tags": [{"key": "amenity", "value": "pharmacy"}]}
+{"text": "薬局付近の", "tags": [{"key": "amenity", "value": "pharmacy"}]}
+{"text": "近くの薬局", "tags": [{"key": "amenity", "value": "pharmacy"}]}
+{"text": "病院", "tags": [{"key": "amenity", "value": "hospital"}]}
+{"text": "病院の場所", "tags": [{"key": "amenity", "value": "hospital"}]}
+{"text": "病院はどこ", "tags": [{"key": "amenity", "value": "hospital"}]}
+{"text": "近くの病院", "tags": [{"key": "amenity", "value": "hospital"}]}
+{"text": "クリニック", "tags": [{"key": "amenity", "value": "clinic"}]}
+{"text": "クリニックの近く", "tags": [{"key": "amenity", "value": "clinic"}]}
+{"text": "クリニックを探している", "tags": [{"key": "amenity", "value": "clinic"}]}
+{"text": "近くのクリニック", "tags": [{"key": "amenity", "value": "clinic"}]}
+{"text": "歯科", "tags": [{"key": "amenity", "value": "dentist"}]}
+{"text": "歯科の場所", "tags": [{"key": "amenity", "value": "dentist"}]}
+{"text": "歯科を探している", "tags": [{"key": "amenity", "value": "dentist"}]}
+{"text": "近くの歯科", "tags": [{"key": "amenity", "value": "dentist"}]}
+{"text": "近くの郵便局", "tags": [{"key": "amenity", "value": "post_office"}]}
+{"text": "郵便局", "tags": [{"key": "amenity", "value": "post_office"}]}
+{"text": "郵便局の近く", "tags": [{"key": "amenity", "value": "post_office"}]}
+{"text": "郵便局はどこ", "tags": [{"key": "amenity", "value": "post_office"}]}
+{"text": "近くの銀行", "tags": [{"key": "amenity", "value": "bank"}]}
+{"text": "銀行", "tags": [{"key": "amenity", "value": "bank"}]}
+{"text": "銀行の近く", "tags": [{"key": "amenity", "value": "bank"}]}
+{"text": "銀行はどこ", "tags": [{"key": "amenity", "value": "bank"}]}
+{"text": "ATM", "tags": [{"key": "amenity", "value": "atm"}]}
+{"text": "ATMの近く", "tags": [{"key": "amenity", "value": "atm"}]}
+{"text": "ATMを探している", "tags": [{"key": "amenity", "value": "atm"}]}
+{"text": "近くのATM", "tags": [{"key": "amenity", "value": "atm"}]}
+{"text": "図書館", "tags": [{"key": "amenity", "value": "library"}]}
+{"text": "図書館の近く", "tags": [{"key": "amenity", "value": "library"}]}
+{"text": "図書館はどこ", "tags": [{"key": "amenity", "value": "library"}]}
+{"text": "近くの図書館", "tags": [{"key": "amenity", "value": "library"}]}
+{"text": "市役所", "tags": [{"key": "amenity", "value": "townhall"}]}
+{"text": "市役所の近く", "tags": [{"key": "amenity", "value": "townhall"}]}
+{"text": "市役所付近の", "tags": [{"key": "amenity", "value": "townhall"}]}
+{"text": "近くの市役所", "tags": [{"key": "amenity", "value": "townhall"}]}
+{"text": "警察署", "tags": [{"key": "amenity", "value": "police"}]}
+{"text": "警察署ありますか", "tags": [{"key": "amenity", "value": "police"}]}
+{"text": "警察署の場所", "tags": [{"key": "amenity", "value": "police"}]}
+{"text": "近くの警察署", "tags": [{"key": "amenity", "value": "police"}]}
+{"text": "消防署", "tags": [{"key": "amenity", "value": "fire_station"}]}
+{"text": "消防署ありますか", "tags": [{"key": "amenity", "value": "fire_station"}]}
+{"text": "消防署の近く", "tags": [{"key": "amenity", "value": "fire_station"}]}
+{"text": "近くの消防署", "tags": [{"key": "amenity", "value": "fire_station"}]}
+{"text": "近くの駐車場", "tags": [{"key": "amenity", "value": "parking"}]}
+{"text": "駐車場", "tags": [{"key": "amenity", "value": "parking"}]}
+{"text": "駐車場はどこ", "tags": [{"key": "amenity", "value": "parking"}]}
+{"text": "駐車場付近の", "tags": [{"key": "amenity", "value": "parking"}]}
+{"text": "コインランドリー", "tags": [{"key": "shop", "value": "laundry"}]}
+{"text": "コインランドリーありますか", "tags": [{"key": "shop", "value": "laundry"}]}
+{"text": "コインランドリーの場所", "tags": [{"key": "shop", "value": "laundry"}]}
+{"text": "近くのコインランドリー", "tags": [{"key": "shop", "value": "laundry"}]}
+{"text": "クリーニング", "tags": [{"key": "shop", "value": "dry_cleaning"}]}
+{"text": "クリーニングはどこ", "tags": [{"key": "shop", "value": "dry_cleaning"}]}
+{"text": "クリーニング付近の", "tags": [{"key": "shop", "value": "dry_cleaning"}]}
+{"text": "近くのクリーニング", "tags": [{"key": "shop", "value": "dry_cleaning"}]}
+{"text": "レンタカー", "tags": [{"key": "amenity", "value": "car_rental"}]}
+{"text": "レンタカーありますか", "tags": [{"key": "amenity", "value": "car_rental"}]}
+{"text": "レンタカーはどこ", "tags": [{"key": "amenity", "value": "car_rental"}]}
+{"text": "近くのレンタカー", "tags": [{"key": "amenity", "value": "car_rental"}]}
+{"text": "美容院", "tags": [{"key": "shop", "value": "hairdresser"}]}
+{"text": "美容院の場所", "tags": [{"key": "shop", "value": "hairdresser"}]}
+{"text": "美容院を探している", "tags": [{"key": "shop", "value": "hairdresser"}]}
+{"text": "近くの美容院", "tags": [{"key": "shop", "value": "hairdresser"}]}
+{"text": "理髪店", "tags": [{"key": "shop", "value": "hairdresser"}]}
+{"text": "理髪店の場所", "tags": [{"key": "shop", "value": "hairdresser"}]}
+{"text": "理髪店を探している", "tags": [{"key": "shop", "value": "hairdresser"}]}
+{"text": "近くの理髪店", "tags": [{"key": "shop", "value": "hairdresser"}]}
+{"text": "ネイルサロン", "tags": [{"key": "shop", "value": "beauty"}]}
+{"text": "ネイルサロンありますか", "tags": [{"key": "shop", "value": "beauty"}]}
+{"text": "ネイルサロンを探している", "tags": [{"key": "shop", "value": "beauty"}]}
+{"text": "近くのネイルサロン", "tags": [{"key": "shop", "value": "beauty"}]}
+{"text": "ホテル", "tags": [{"key": "tourism", "value": "hotel"}]}
+{"text": "ホテルの場所", "tags": [{"key": "tourism", "value": "hotel"}]}
+{"text": "ホテルを探している", "tags": [{"key": "tourism", "value": "hotel"}]}
+{"text": "近くのホテル", "tags": [{"key": "tourism", "value": "hotel"}]}
+{"text": "旅館", "tags": [{"key": "tourism", "value": "guest_house"}]}
+{"text": "旅館の場所", "tags": [{"key": "tourism", "value": "guest_house"}]}
+{"text": "旅館を探している", "tags": [{"key": "tourism", "value": "guest_house"}]}
+{"text": "近くの旅館", "tags": [{"key": "tourism", "value": "guest_house"}]}
+{"text": "ホステル", "tags": [{"key": "tourism", "value": "hostel"}]}
+{"text": "ホステルありますか", "tags": [{"key": "tourism", "value": "hostel"}]}
+{"text": "ホステル付近の", "tags": [{"key": "tourism", "value": "hostel"}]}
+{"text": "近くのホステル", "tags": [{"key": "tourism", "value": "hostel"}]}
+{"text": "公園", "tags": [{"key": "leisure", "value": "park"}]}
+{"text": "公園はどこ", "tags": [{"key": "leisure", "value": "park"}]}
+{"text": "公園を探している", "tags": [{"key": "leisure", "value": "park"}]}
+{"text": "近くの公園", "tags": [{"key": "leisure", "value": "park"}]}
+{"text": "映画館", "tags": [{"key": "amenity", "value": "cinema"}]}
+{"text": "映画館の近く", "tags": [{"key": "amenity", "value": "cinema"}]}
+{"text": "映画館を探している", "tags": [{"key": "amenity", "value": "cinema"}]}
+{"text": "近くの映画館", "tags": [{"key": "amenity", "value": "cinema"}]}
+{"text": "美術館", "tags": [{"key": "tourism", "value": "museum"}]}
+{"text": "美術館ありますか", "tags": [{"key": "tourism", "value": "museum"}]}
+{"text": "美術館付近の", "tags": [{"key": "tourism", "value": "museum"}]}
+{"text": "近くの美術館", "tags": [{"key": "tourism", "value": "museum"}]}
+{"text": "博物館", "tags": [{"key": "tourism", "value": "museum"}]}
+{"text": "博物館の近く", "tags": [{"key": "tourism", "value": "museum"}]}
+{"text": "博物館を探している", "tags": [{"key": "tourism", "value": "museum"}]}
+{"text": "近くの博物館", "tags": [{"key": "tourism", "value": "museum"}]}
+{"text": "水族館", "tags": [{"key": "tourism", "value": "aquarium"}]}
+{"text": "水族館ありますか", "tags": [{"key": "tourism", "value": "aquarium"}]}
+{"text": "水族館付近の", "tags": [{"key": "tourism", "value": "aquarium"}]}
+{"text": "近くの水族館", "tags": [{"key": "tourism", "value": "aquarium"}]}
+{"text": "動物園", "tags": [{"key": "tourism", "value": "zoo"}]}
+{"text": "動物園ありますか", "tags": [{"key": "tourism", "value": "zoo"}]}
+{"text": "動物園はどこ", "tags": [{"key": "tourism", "value": "zoo"}]}
+{"text": "近くの動物園", "tags": [{"key": "tourism", "value": "zoo"}]}
+{"text": "ボウリング場", "tags": [{"key": "leisure", "value": "bowling_alley"}]}
+{"text": "ボウリング場ありますか", "tags": [{"key": "leisure", "value": "bowling_alley"}]}
+{"text": "ボウリング場を探している", "tags": [{"key": "leisure", "value": "bowling_alley"}]}
+{"text": "近くのボウリング場", "tags": [{"key": "leisure", "value": "bowling_alley"}]}
+{"text": "フィットネスジム", "tags": [{"key": "leisure", "value": "fitness_centre"}]}
+{"text": "フィットネスジムを探している", "tags": [{"key": "leisure", "value": "fitness_centre"}]}
+{"text": "フィットネスジム付近の", "tags": [{"key": "leisure", "value": "fitness_centre"}]}
+{"text": "近くのフィットネスジム", "tags": [{"key": "leisure", "value": "fitness_centre"}]}
+{"text": "プール", "tags": [{"key": "leisure", "value": "swimming_pool"}]}
+{"text": "プールありますか", "tags": [{"key": "leisure", "value": "swimming_pool"}]}
+{"text": "プールはどこ", "tags": [{"key": "leisure", "value": "swimming_pool"}]}
+{"text": "近くのプール", "tags": [{"key": "leisure", "value": "swimming_pool"}]}
+{"text": "ゴルフ場", "tags": [{"key": "leisure", "value": "golf_course"}]}
+{"text": "ゴルフ場の近く", "tags": [{"key": "leisure", "value": "golf_course"}]}
+{"text": "ゴルフ場はどこ", "tags": [{"key": "leisure", "value": "golf_course"}]}
+{"text": "近くのゴルフ場", "tags": [{"key": "leisure", "value": "golf_course"}]}
+{"text": "ガソリンスタンド", "tags": [{"key": "amenity", "value": "fuel"}]}
+{"text": "ガソリンスタンドの近く", "tags": [{"key": "amenity", "value": "fuel"}]}
+{"text": "ガソリンスタンド付近の", "tags": [{"key": "amenity", "value": "fuel"}]}
+{"text": "近くのガソリンスタンド", "tags": [{"key": "amenity", "value": "fuel"}]}
