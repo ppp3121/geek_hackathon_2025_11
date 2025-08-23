@@ -7,11 +7,7 @@ import 'widgets/floating_search_bar.dart';
 import 'widgets/collapsible_category_selector.dart';
 
 void main() {
-  runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -64,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _highlightedFacilityId = facilityId;
     });
     print('施設がタップされました: $facilityId');
-    
+
     // ハイライトを一定時間後にクリア
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
@@ -85,9 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Expanded(
                   flex: 2,
-                  child: MapWidget(
-                    onFacilityTapped: _handleFacilityTapped,
-                  ),
+                  child: MapWidget(onFacilityTapped: _handleFacilityTapped),
                 ),
                 Container(
                   decoration: BoxDecoration(

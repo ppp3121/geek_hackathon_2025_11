@@ -8,3 +8,12 @@ typings/
 # Node.js dependency directory
 node_modules/
 *.local
+
+# Ignore generated and large artifacts
+__pycache__/
+tools/
+data/
+archive/
+deploy/
+Dockerfile
+ML/transformer_model/

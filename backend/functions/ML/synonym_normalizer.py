@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""同義語正規化ユーティリティ (moved to ML package)
-"""
+"""同義語正規化ユーティリティ (moved to ML package)"""
 from pathlib import Path
 import json
 import random
@@ -22,9 +21,11 @@ SYNONYM_MAP: Dict[str, List[str]] = {
 AUG_SUFFIXES = ["の近く", "近くの", "がある", "を探している", "の場所"]
 
 
-def generate_synonym_dataset(out_path: Path = Path("synonym_training.jsonl"),
-                             n_per_canonical: int = 20,
-                             seed: int = 42):
+def generate_synonym_dataset(
+    out_path: Path = Path("synonym_training.jsonl"),
+    n_per_canonical: int = 20,
+    seed: int = 42,
+):
     random.seed(seed)
     out = []
     for canonical, syns in SYNONYM_MAP.items():
@@ -107,7 +108,9 @@ class _LazyModel:
 _MODEL = _LazyModel(MODEL_FILENAME)
 
 
-def normalize_query(text: str, min_confidence: Optional[float] = DEFAULT_MIN_CONFIDENCE) -> Optional[str]:
+def normalize_query(
+    text: str, min_confidence: Optional[float] = DEFAULT_MIN_CONFIDENCE
+) -> Optional[str]:
     if not text:
         return None
     d = _dict_match(text)

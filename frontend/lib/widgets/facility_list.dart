@@ -37,25 +37,25 @@ class _FacilityListState extends ConsumerState<FacilityList> {
   void scrollToFacility(String facilityId, List<Facility> facilities) {
     final index = facilities.indexWhere((f) => f.id.toString() == facilityId);
     if (index == -1 || !_scrollController.hasClients) return;
-    
+
     // レンダリング完了を待ってからスクロール実行
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_scrollController.hasClients) return;
-      
+
       final position = _scrollController.position;
       final itemHeight = 88.0;
       final viewportHeight = position.viewportDimension;
-      
+
       // アイテムの開始位置
       final itemStart = index * itemHeight;
       final itemEnd = itemStart + itemHeight;
-      
+
       // 現在の表示範囲
       final currentStart = position.pixels;
       final currentEnd = currentStart + viewportHeight;
-      
+
       double? targetOffset;
-      
+
       // アイテムが現在の表示範囲外にある場合のみスクロール
       if (itemEnd > currentEnd) {
         // 下にスクロールが必要
@@ -64,13 +64,13 @@ class _FacilityListState extends ConsumerState<FacilityList> {
         // 上にスクロールが必要
         targetOffset = itemStart - 20; // 20pxのマージン
       }
-      
+
       if (targetOffset != null) {
         final clampedOffset = targetOffset.clamp(
           position.minScrollExtent,
           position.maxScrollExtent,
         );
-        
+
         _scrollController.animateTo(
           clampedOffset,
           duration: const Duration(milliseconds: 500),
@@ -99,11 +99,7 @@ class _FacilityListState extends ConsumerState<FacilityList> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.error_outline,
-              size: 48,
-              color: Colors.red,
-            ),
+            const Icon(Icons.error_outline, size: 48, color: Colors.red),
             const SizedBox(height: 16),
             const Text(
               '検索中にエラーが発生しました',
@@ -118,10 +114,7 @@ class _FacilityListState extends ConsumerState<FacilityList> {
             Text(
               'エラーの詳細は通知をご確認ください',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.grey[600], fontSize: 14),
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
@@ -144,11 +137,7 @@ class _FacilityListState extends ConsumerState<FacilityList> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.search_off,
-                  size: 64,
-                  color: Colors.grey[400],
-                ),
+                Icon(Icons.search_off, size: 64, color: Colors.grey[400]),
                 const SizedBox(height: 16),
                 Text(
                   '条件に一致する施設が見つかりませんでした',
@@ -162,10 +151,7 @@ class _FacilityListState extends ConsumerState<FacilityList> {
                 const SizedBox(height: 8),
                 Text(
                   '検索条件を変更するか、\n別の場所で検索してみてください',
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.grey[500], fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
@@ -192,7 +178,7 @@ class _FacilityListState extends ConsumerState<FacilityList> {
           itemCount: facilities.length,
           itemBuilder: (context, index) {
             final facility = facilities[index];
-            final isHighlighted = 
+            final isHighlighted =
                 widget.highlightedFacilityId == facility.id.toString();
             return FacilityListItem(
               facility: facility,
@@ -231,14 +217,14 @@ class _FacilityListItemState extends State<FacilityListItem>
       duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
-    
-    _highlightAnimation = ColorTween(
-      begin: Colors.blue.withOpacity(0.3),
-      end: Colors.transparent,
-    ).animate(CurvedAnimation(
-      parent: _highlightController,
-      curve: Curves.easeOut,
-    ));
+
+    _highlightAnimation =
+        ColorTween(
+          begin: Colors.blue.withOpacity(0.3),
+          end: Colors.transparent,
+        ).animate(
+          CurvedAnimation(parent: _highlightController, curve: Curves.easeOut),
+        );
   }
 
   @override
@@ -281,9 +267,7 @@ class _FacilityListItemState extends State<FacilityListItem>
             ),
             title: Text(
               widget.facility.name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,10 +276,7 @@ class _FacilityListItemState extends State<FacilityListItem>
                 const SizedBox(height: 2),
                 Text(
                   '${widget.facility.lat.toStringAsFixed(4)}, ${widget.facility.lon.toStringAsFixed(4)}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -330,10 +311,7 @@ class _FacilityListItemState extends State<FacilityListItem>
                 ],
               ),
               const SizedBox(height: 16),
-              const Text(
-                '位置情報',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              const Text('位置情報', style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 4),
               Text('緯度: ${facility.lat.toStringAsFixed(6)}'),
               Text('経度: ${facility.lon.toStringAsFixed(6)}'),
