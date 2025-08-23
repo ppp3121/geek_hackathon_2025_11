@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 import '../providers/search_condition_provider.dart';
 import '../providers/facility_cache_provider.dart';
 import '../models/facility.dart';
+import '../utils/map_tiles.dart';
 
 class MapWidget extends ConsumerStatefulWidget {
   const MapWidget({super.key});
@@ -36,7 +37,8 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
       ),
       children: [
         TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          urlTemplate: MapTiles.current,
+          subdomains: MapTiles.subdomains,
           userAgentPackageName: 'com.example.frontend',
         ),
         MarkerLayer(
