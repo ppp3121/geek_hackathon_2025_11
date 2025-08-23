@@ -1,125 +1,20 @@
 #!/usr/bin/env python3
-"""辞書ベースの簡易マッチャー: 入力クエリを OSM の (key,value) にマップする。
+"""辞書ベースの簡易マッチャー: 入力クエリを OSM の (key, value) にマップする。
 
 このモジュールは以下を提供します:
-- `DEFAULT_DIC`: キーワード (日本語) -> list of (key, value)
 - `normalize_text(s)`: 照合用の正規化関数
 - `match_query(query, top_k)`: スコア付き候補を返す
 - `match_query_or_none(query, top_k, min_score)`: 信頼度閾値で辞書優先判定を行う
 
-設計上、辞書に確信あるマッチがあればその結果を返し、なければ呼び出し側は
-ML 正規化器を試す（フォールバック）ことを想定しています。
+辞書データは ML/dictionary.py の `KEYWORD_TO_TAGS` を参照します。
 """
 
 from typing import List, Dict, Tuple, Optional
 import re
+from .dictionary import KEYWORD_TO_TAGS
 
 
-# 大量のエントリはここに展開（重複は上書きされる）
-DEFAULT_DIC: Dict[str, List[Tuple[str, str]]] = {
-    "ラーメン": [("amenity", "restaurant"), ("cuisine", "ramen")],
-    "らーめん": [("amenity", "restaurant"), ("cuisine", "ramen")],
-    "カフェ": [("amenity", "cafe"), ("shop", "tea")],
-    "コーヒー": [("amenity", "cafe"), ("shop", "tea")],
-    "コンビニ": [("amenity", "convenience"), ("shop", "variety_store")],
-    "ATM": [("amenity", "atm")],
-    "病院": [("amenity", "hospital")],
-    "ホテル": [("tourism", "hotel")],
-    # 追加
-    "パン屋": [("shop", "bakery")],
-    "ベーカリー": [("shop", "bakery")],
-    "トイレ": [("amenity", "toilets")],
-    "駅": [("railway", "station")],
-    "図書館": [("amenity", "library")],
-    "郵便局": [("amenity", "post_office")],
-    "銀行": [("amenity", "bank")],
-    "バス停": [("highway", "bus_stop")],
-    "コインランドリー": [("shop", "laundry")],
-    "薬局": [("amenity", "pharmacy")],
-    "bakery": [("shop", "bakery")],
-    "atm": [("amenity", "atm")],
-    # CSV additions (merged)
-    "レストラン": [("amenity", "restaurant")],
-    "スーパーマーケット": [("shop", "supermarket")],
-    "デパート": [("shop", "department_store")],
-    "うどん": [("amenity", "restaurant"), ("cuisine", "udon")],
-    "そば": [("amenity", "restaurant"), ("cuisine", "soba")],
-    "寿司": [("amenity", "restaurant"), ("cuisine", "sushi")],
-    "焼肉": [("amenity", "restaurant"), ("cuisine", "yakiniku")],
-    "焼き鳥": [("amenity", "restaurant"), ("cuisine", "yakitori")],
-    "天ぷら": [("amenity", "restaurant"), ("cuisine", "tempura")],
-    "とんかつ": [("amenity", "restaurant"), ("cuisine", "tonkatsu")],
-    "丼物": [("amenity", "restaurant"), ("cuisine", "donburi")],
-    "お好み焼き": [("amenity", "restaurant"), ("cuisine", "okonomiyaki")],
-    "ピザ": [("amenity", "restaurant"), ("cuisine", "pizza")],
-    "カレー": [("amenity", "restaurant"), ("cuisine", "curry")],
-    "ハンバーガー": [("amenity", "fast_food"), ("cuisine", "burger")],
-    "中華料理": [("amenity", "restaurant"), ("cuisine", "chinese")],
-    "韓国料理": [("amenity", "restaurant"), ("cuisine", "korean")],
-    "タイ料理": [("amenity", "restaurant"), ("cuisine", "thai")],
-    "ベトナム料理": [("amenity", "restaurant"), ("cuisine", "vietnamese")],
-    "インド料理": [("amenity", "restaurant"), ("cuisine", "indian")],
-    "スペイン料理": [("amenity", "restaurant"), ("cuisine", "spanish")],
-    "メキシコ料理": [("amenity", "restaurant"), ("cuisine", "mexican")],
-    "居酒屋": [("amenity", "bar")],
-    "バー": [("amenity", "bar")],
-    "パブ": [("amenity", "pub")],
-    "ケーキ屋": [("shop", "pastry")],
-    "和菓子屋": [("shop", "confectionery")],
-    "酒店": [("shop", "alcohol")],
-    "お茶屋": [("shop", "tea")],
-    "精肉店": [("shop", "butcher")],
-    "鮮魚店": [("shop", "seafood")],
-    "八百屋": [("shop", "greengrocer")],
-    "本屋": [("shop", "books")],
-    "文房具店": [("shop", "stationery")],
-    "服屋": [("shop", "clothes")],
-    "靴屋": [("shop", "shoes")],
-    "鞄屋": [("shop", "bag")],
-    "宝飾店": [("shop", "jewelry")],
-    "メガネ屋": [("shop", "optician")],
-    "時計屋": [("shop", "watches")],
-    "家具屋": [("shop", "furniture")],
-    "雑貨屋": [("shop", "variety_store")],
-    "花屋": [("shop", "florist")],
-    "園芸店": [("shop", "garden_centre")],
-    "ホームセンター": [("shop", "doityourself")],
-    "金物屋": [("shop", "hardware")],
-    "家電量販店": [("shop", "electronics")],
-    "携帯ショップ": [("shop", "mobile_phone")],
-    "ドラッグストア": [("shop", "chemist")],
-    "化粧品店": [("shop", "cosmetics")],
-    "おもちゃ屋": [("shop", "toys")],
-    "ゲームセンター": [("leisure", "amusement_arcade")],
-    "スポーツ用品店": [("shop", "sports")],
-    "自転車屋": [("shop", "bicycle")],
-    "ペットショップ": [("shop", "pet")],
-    "楽器店": [("shop", "musical_instrument")],
-    "クリニック": [("amenity", "clinic")],
-    "歯科": [("amenity", "dentist")],
-    "市役所": [("amenity", "townhall")],
-    "警察署": [("amenity", "police")],
-    "消防署": [("amenity", "fire_station")],
-    "駐車場": [("amenity", "parking")],
-    "クリーニング": [("shop", "dry_cleaning")],
-    "レンタカー": [("amenity", "car_rental")],
-    "美容院": [("shop", "hairdresser")],
-    "理髪店": [("shop", "hairdresser")],
-    "ネイルサロン": [("shop", "beauty")],
-    "旅館": [("tourism", "guest_house")],
-    "ホステル": [("tourism", "hostel")],
-    "公園": [("leisure", "park")],
-    "映画館": [("amenity", "cinema")],
-    "美術館": [("tourism", "museum")],
-    "博物館": [("tourism", "museum")],
-    "水族館": [("tourism", "aquarium")],
-    "動物園": [("tourism", "zoo")],
-    "ボウリング場": [("leisure", "bowling_alley")],
-    "フィットネスジム": [("leisure", "fitness_centre")],
-    "プール": [("leisure", "swimming_pool")],
-    "ゴルフ場": [("leisure", "golf_course")],
-    "ガソリンスタンド": [("amenity", "fuel")],
-}
+DEFAULT_DIC: Dict[str, List[Tuple[str, str]]] = KEYWORD_TO_TAGS
 
 
 def normalize_text(s: str) -> str:
