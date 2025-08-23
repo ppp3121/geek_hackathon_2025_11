@@ -91,7 +91,7 @@ export const searchFacilities = onRequest(
 
         // MLサービスを呼び出してキーワードを解析
         let searchTerms: SearchTerm[] = [];
-        const mlServiceUrl = "http://127.0.0.1:8000/api/v1/analyze-keywords";
+        const mlServiceUrl = "https://facility-search-ml-2mbtkgeqaa-uc.a.run.app/api/v1/analyze-keywords";
 
         try {
             const mlResponse = await axios.post<{ searchTerms: SearchTerm[] }>(
