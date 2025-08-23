@@ -1,0 +1,16 @@
+# Virtual environment
+venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Large ML artifacts
+backend/functions/ML/transformer_model/
+
+# IDE / system
+.vscode/
+.DS_Store
+
+# node
+node_modules/
