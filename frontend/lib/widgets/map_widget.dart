@@ -8,7 +8,12 @@ import '../models/facility.dart';
 import '../utils/map_tiles.dart';
 
 class MapWidget extends ConsumerStatefulWidget {
-  const MapWidget({super.key});
+  final Function(String facilityId)? onFacilityTapped;
+
+  const MapWidget({
+    super.key,
+    this.onFacilityTapped,
+  });
 
   @override
   ConsumerState<MapWidget> createState() => _MapWidgetState();
@@ -66,7 +71,11 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
                     height: 30,
                     child: GestureDetector(
                       onTap: () {
-                        _showFacilityInfo(context, facility);
+                        if (widget.onFacilityTapped != null) {
+                          widget.onFacilityTapped!(facility.id.toString());
+                        } else {
+                          _showFacilityInfo(context, facility);
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -93,7 +102,11 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
                     height: 30,
                     child: GestureDetector(
                       onTap: () {
-                        _showFacilityInfo(context, facility);
+                        if (widget.onFacilityTapped != null) {
+                          widget.onFacilityTapped!(facility.id.toString());
+                        } else {
+                          _showFacilityInfo(context, facility);
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -120,7 +133,11 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
                     height: 30,
                     child: GestureDetector(
                       onTap: () {
-                        _showFacilityInfo(context, facility);
+                        if (widget.onFacilityTapped != null) {
+                          widget.onFacilityTapped!(facility.id.toString());
+                        } else {
+                          _showFacilityInfo(context, facility);
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(

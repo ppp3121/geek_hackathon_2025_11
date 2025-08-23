@@ -39,6 +39,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<String> _selectedCategories = ['restaurant', 'cafe', 'convenience'];
+  String? _highlightedFacilityId;
 
   void _handleSearch(String query) {
     // TODO: 自然言語検索の実装
@@ -58,6 +59,22 @@ class _MyHomePageState extends State<MyHomePage> {
     print('カテゴリが変更されました: $categories');
   }
 
+  void _handleFacilityTapped(String facilityId) {
+    setState(() {
+      _highlightedFacilityId = facilityId;
+    });
+    print('施設がタップされました: $facilityId');
+    
+    // ハイライトを一定時間後にクリア
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          _highlightedFacilityId = null;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ErrorHandler(
@@ -66,9 +83,11 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Column(
               children: [
-                const Expanded(
+                Expanded(
                   flex: 2,
-                  child: MapWidget(),
+                  child: MapWidget(
+                    onFacilityTapped: _handleFacilityTapped,
+                  ),
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -97,9 +116,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
-                const Expanded(
+                Expanded(
                   flex: 1,
-                  child: FacilityList(),
+                  child: FacilityList(
+                    highlightedFacilityId: _highlightedFacilityId,
+                  ),
                 ),
               ],
             ),

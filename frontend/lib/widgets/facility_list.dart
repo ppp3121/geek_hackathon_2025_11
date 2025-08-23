@@ -3,11 +3,85 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/facility.dart';
 import '../providers/facility_cache_provider.dart';
 
-class FacilityList extends ConsumerWidget {
-  const FacilityList({super.key});
+class FacilityList extends ConsumerStatefulWidget {
+  final String? highlightedFacilityId;
+  final ScrollController? scrollController;
+
+  const FacilityList({
+    super.key,
+    this.highlightedFacilityId,
+    this.scrollController,
+  });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<FacilityList> createState() => _FacilityListState();
+}
+
+class _FacilityListState extends ConsumerState<FacilityList> {
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = widget.scrollController ?? ScrollController();
+  }
+
+  @override
+  void dispose() {
+    if (widget.scrollController == null) {
+      _scrollController.dispose();
+    }
+    super.dispose();
+  }
+
+  void scrollToFacility(String facilityId, List<Facility> facilities) {
+    final index = facilities.indexWhere((f) => f.id.toString() == facilityId);
+    if (index == -1 || !_scrollController.hasClients) return;
+    
+    // レンダリング完了を待ってからスクロール実行
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) return;
+      
+      final position = _scrollController.position;
+      final itemHeight = 88.0;
+      final viewportHeight = position.viewportDimension;
+      
+      // アイテムの開始位置
+      final itemStart = index * itemHeight;
+      final itemEnd = itemStart + itemHeight;
+      
+      // 現在の表示範囲
+      final currentStart = position.pixels;
+      final currentEnd = currentStart + viewportHeight;
+      
+      double? targetOffset;
+      
+      // アイテムが現在の表示範囲外にある場合のみスクロール
+      if (itemEnd > currentEnd) {
+        // 下にスクロールが必要
+        targetOffset = itemEnd - viewportHeight + 20; // 20pxのマージン
+      } else if (itemStart < currentStart) {
+        // 上にスクロールが必要
+        targetOffset = itemStart - 20; // 20pxのマージン
+      }
+      
+      if (targetOffset != null) {
+        final clampedOffset = targetOffset.clamp(
+          position.minScrollExtent,
+          position.maxScrollExtent,
+        );
+        
+        _scrollController.animateTo(
+          clampedOffset,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final facilitiesAsync = ref.watch(currentFacilitiesProvider);
 
     return facilitiesAsync.when(
@@ -107,12 +181,23 @@ class FacilityList extends ConsumerWidget {
           );
         }
 
+        // ハイライトされた施設があればスクロール
+        if (widget.highlightedFacilityId != null) {
+          scrollToFacility(widget.highlightedFacilityId!, facilities);
+        }
+
         return ListView.builder(
+          controller: _scrollController,
           padding: const EdgeInsets.all(8),
           itemCount: facilities.length,
           itemBuilder: (context, index) {
             final facility = facilities[index];
-            return FacilityListItem(facility: facility);
+            final isHighlighted = 
+                widget.highlightedFacilityId == facility.id.toString();
+            return FacilityListItem(
+              facility: facility,
+              isHighlighted: isHighlighted,
+            );
           },
         );
       },
@@ -120,57 +205,107 @@ class FacilityList extends ConsumerWidget {
   }
 }
 
-class FacilityListItem extends StatelessWidget {
+class FacilityListItem extends StatefulWidget {
   final Facility facility;
+  final bool isHighlighted;
 
   const FacilityListItem({
     super.key,
     required this.facility,
+    this.isHighlighted = false,
   });
 
   @override
+  State<FacilityListItem> createState() => _FacilityListItemState();
+}
+
+class _FacilityListItemState extends State<FacilityListItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _highlightController;
+  late Animation<Color?> _highlightAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _highlightController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    
+    _highlightAnimation = ColorTween(
+      begin: Colors.blue.withOpacity(0.3),
+      end: Colors.transparent,
+    ).animate(CurvedAnimation(
+      parent: _highlightController,
+      curve: Curves.easeOut,
+    ));
+  }
+
+  @override
+  void didUpdateWidget(FacilityListItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isHighlighted && !oldWidget.isHighlighted) {
+      _highlightController.forward().then((_) {
+        _highlightController.reset();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _highlightController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: ListTile(
-        leading: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: _getCategoryColor(facility.category),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            _getCategoryIcon(facility.category),
-            color: Colors.white,
-            size: 20,
-          ),
-        ),
-        title: Text(
-          facility.name,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(_getCategoryDisplayName(facility.category)),
-            const SizedBox(height: 2),
-            Text(
-              '${facility.lat.toStringAsFixed(4)}, ${facility.lon.toStringAsFixed(4)}',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
+    return AnimatedBuilder(
+      animation: _highlightAnimation,
+      builder: (context, child) {
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+          color: widget.isHighlighted ? _highlightAnimation.value : null,
+          child: ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: _getCategoryColor(widget.facility.category),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                _getCategoryIcon(widget.facility.category),
+                color: Colors.white,
+                size: 20,
               ),
             ),
-          ],
-        ),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: () {
-          _showFacilityDetail(context, facility);
-        },
-      ),
+            title: Text(
+              widget.facility.name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(_getCategoryDisplayName(widget.facility.category)),
+                const SizedBox(height: 2),
+                Text(
+                  '${widget.facility.lat.toStringAsFixed(4)}, ${widget.facility.lon.toStringAsFixed(4)}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {
+              _showFacilityDetail(context, widget.facility);
+            },
+          ),
+        );
+      },
     );
   }
 
