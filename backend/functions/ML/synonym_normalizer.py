@@ -164,9 +164,9 @@ def demo():
         print(f"{e} -> {normalize_query(e, min_confidence=0.6)}")
 
 
-if __name__ == "__main__":
-    demo()
+#if __name__ == "__main__":
+#    demo()
 
 # This file was moved to backend/functions/ML/synonym_normalizer.py
 # Keep this placeholder to avoid import-time errors for older references.
-raise RuntimeError("synonym_normalizer module has moved to backend.functions.ML.synonym_normalizer")
+#raise RuntimeError("synonym_normalizer module has moved to backend.functions.ML.synonym_normalizer")

@@ -23,6 +23,7 @@ interface OverpassElement {
     tags?: {
         name?: string;
         amenity?: string;
+        cuisine?: string;
     };
 }
 
@@ -165,7 +166,7 @@ export const searchFacilities = onRequest(
                         name: elem.tags!.name!, // filterで存在確認済み
                         lat: facilityLat,
                         lon: facilityLon,
-                        category: elem.tags?.amenity ?? "unknown", // amenityタグをカテゴリとして利用
+                        category: elem.tags?.cuisine ?? elem.tags?.amenity ?? "unknown", // amenityタグをカテゴリとして利用
                     };
                 });
 
