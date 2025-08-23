@@ -9,7 +9,7 @@ import joblib
 from google.cloud import storage
 from dict_matcher import match_query_or_none
 from train_synonym_normalizer import OUT_MODEL
-from synonym_normalizer import normalize_query
+from ML.synonym_normalizer import normalize_query
 
 app = FastAPI(title="OSM Tagging ML API (MVP)")
 
@@ -151,7 +151,7 @@ def train(req: TrainReq, background_tasks: BackgroundTasks):
 
     def run_training():
         try:
-            from synonym_normalizer import generate_synonym_dataset
+            from ML.synonym_normalizer import generate_synonym_dataset
             from train_synonym_normalizer import train_and_save
 
             dp = Path(data_path)

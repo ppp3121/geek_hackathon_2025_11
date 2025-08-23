@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
-"""同義語正規化ユーティリティ
-
-このモジュールは簡易的な同義語辞書 (`SYNONYM_MAP`) を基に学習用データを生成する
-`generate_synonym_dataset` を提供します。また、辞書優先→学習モデルのフォールバックを行う
-`normalize_query` を提供し、API やデモから一貫して呼べる単一モジュールにしています。
-
-注意: モジュールは import 時に副作用を起こさないように実装してあります。
+"""同義語正規化ユーティリティ (moved to ML package)
 """
 from pathlib import Path
 import json
@@ -31,10 +25,6 @@ AUG_SUFFIXES = ["の近く", "近くの", "がある", "を探している", "�
 def generate_synonym_dataset(out_path: Path = Path("synonym_training.jsonl"),
                              n_per_canonical: int = 20,
                              seed: int = 42):
-    """Generate a JSONL file with fields {"text": <variant>, "label": <canonical>}.
-
-    n_per_canonical controls data volume per canonical term.
-    """
     random.seed(seed)
     out = []
     for canonical, syns in SYNONYM_MAP.items():
@@ -44,7 +34,6 @@ def generate_synonym_dataset(out_path: Path = Path("synonym_training.jsonl"),
             for suf in AUG_SUFFIXES:
                 variants.append(s + suf)
 
-        # remove duplicates while keeping order
         seen = set()
         uniq = []
         for v in variants:
@@ -81,14 +70,11 @@ def generate_synonym_dataset(out_path: Path = Path("synonym_training.jsonl"),
     return len(out)
 
 
-# Runtime helpers
 MODEL_FILENAME = Path(__file__).with_name("synonym_normalizer.joblib")
-# default minimum confidence for model predictions (None = accept any prediction)
 DEFAULT_MIN_CONFIDENCE: Optional[float] = None
 
 
 def _dict_match(text: str) -> Optional[str]:
-    """Return canonical form if dictionary matches, else None."""
     if not text:
         return None
     t = text.strip().lower()
@@ -98,7 +84,6 @@ def _dict_match(text: str) -> Optional[str]:
         for s in syns:
             if t == s.lower():
                 return canonical
-    # substring match
     for canonical in SYNONYM_MAP:
         if canonical in text:
             return canonical
@@ -123,14 +108,6 @@ _MODEL = _LazyModel(MODEL_FILENAME)
 
 
 def normalize_query(text: str, min_confidence: Optional[float] = DEFAULT_MIN_CONFIDENCE) -> Optional[str]:
-    """Normalize user query to canonical term.
-
-    Flow:
-    - dictionary-first exact/substr match
-    - if no match, use sklearn model if available
-    - if model supports predict_proba and `min_confidence` is set, require max proba >= min_confidence
-    - return None when no rule applies or confidence is too low
-    """
     if not text:
         return None
     d = _dict_match(text)
@@ -141,7 +118,6 @@ def normalize_query(text: str, min_confidence: Optional[float] = DEFAULT_MIN_CON
     if model is None:
         return None
     try:
-        # if model supports probabilities and threshold is provided, use it
         if min_confidence is not None and hasattr(model, "predict_proba"):
             probs = model.predict_proba([text])
             probs0 = list(probs[0])
@@ -153,7 +129,6 @@ def normalize_query(text: str, min_confidence: Optional[float] = DEFAULT_MIN_CON
             else:
                 return None
         else:
-            # fallback: use predict() as before
             pred = model.predict([text])
             if len(pred) > 0:
                 return pred[0]
@@ -181,7 +156,3 @@ def demo():
 
 if __name__ == "__main__":
     demo()
-
-# This file was moved to backend/functions/ML/synonym_normalizer.py
-# Keep this placeholder to avoid import-time errors for older references.
-raise RuntimeError("synonym_normalizer module has moved to backend.functions.ML.synonym_normalizer")
