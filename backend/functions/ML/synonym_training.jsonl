@@ -1,0 +1,26 @@
+REMOVED: large training JSONL moved to backend/functions/data/synonym_training.jsonl
+If you need the dataset, see backend/functions/data/synonym_training.jsonl or VCS history.
+{"text": "bakery", "label": "パン屋"}
+{"text": "bakeryの近く", "label": "パン屋"}
+{"text": "bakery近くの", "label": "パン屋"}
+{"text": "bakeryがある", "label": "パン屋"}
+{"text": "bakeryを探している", "label": "パン屋"}
+{"text": "近くのbakery", "label": "パン屋"}
+{"text": "パン店", "label": "パン屋"}
+{"text": "パン店の近く", "label": "パン屋"}
+{"text": "パン店近くの", "label": "パン屋"}
+{"text": "パン店がある", "label": "パン屋"}
+{"text": "パン店を探している", "label": "パン屋"}
+{"text": "パン店の場所", "label": "パン屋"}
+{"text": "ベーカリー", "label": "パン屋"}
+{"text": "ベーカリーの近く", "label": "パン屋"}
+{"text": "ベーカリー近くの", "label": "パン屋"}
+{"text": "ベーカリーがある", "label": "パン屋"}
+{"text": "ベーカリーを探している", "label": "パン屋"}
+{"text": "ベーカリーの場所", "label": "パン屋"}
+{"text": "パン屋", "label": "パン屋"}
+{"text": "パン屋の近く", "label": "パン屋"}
+{"text": "パン屋近くの", "label": "パン屋"}
+{"text": "パン屋がある", "label": "パン屋"}
+{"text": "パン屋を探している", "label": "パン屋"}
+{"text": "パン屋の場所", "label": "パン屋"}
