@@ -182,6 +182,4 @@ def demo():
 if __name__ == "__main__":
     demo()
 
-# This file was moved to backend/functions/ML/synonym_normalizer.py
-# Keep this placeholder to avoid import-time errors for older references.
-raise RuntimeError("synonym_normalizer module has moved to backend.functions.ML.synonym_normalizer")
+# End of runtime implementation. This module is import-safe for the Cloud Functions runtime.

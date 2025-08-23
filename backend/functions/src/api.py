@@ -6,9 +6,8 @@ from pathlib import Path
 import threading
 import os
 import joblib
-from google.cloud import storage
-from dict_matcher import match_query_or_none
-from train_synonym_normalizer import OUT_MODEL
+from ML.dict_matcher import match_query_or_none
+from ML.train_synonym_normalizer import OUT_MODEL
 from ML.synonym_normalizer import normalize_query
 
 app = FastAPI(title="OSM Tagging ML API (MVP)")
@@ -45,6 +44,12 @@ def startup():
     # 同義語正規化モデル（joblib）をロードしておく（あれば）。
     # 環境変数 MODEL_GCS_URI が設定されていれば GCS からダウンロードしてからロードする。
     def download_model_from_gcs(gcs_uri: str, dest_path: str):
+        # Import inside function to avoid increasing cold-start time when GCS is not used.
+        try:
+            from google.cloud import storage
+        except Exception:
+            raise RuntimeError("google-cloud-storage is not available in this environment")
+
         if not gcs_uri.startswith("gs://"):
             raise ValueError("MODEL_GCS_URI must be a gs:// URI")
         rest = gcs_uri[len("gs://"):]
@@ -96,12 +101,12 @@ def analyze(req: Query):
     辞書優先 → 同義語正規化器（normalizer）で正規化 → 正規形で辞書検索
     どれもヒットしなければ ML_SPEC.md に合わせて 400 を返す
     """
-    q = (req.query or "").strip()
-    if not q:
+    q_text = (req.query or "").strip()
+    if not q_text:
         return JSONResponse(status_code=400, content={"error": {"code": 400, "message": "解析不能なキーワードです。"}})
 
     # 1) 辞書優先
-    dict_res = match_query_or_none(q.query, top_k=2)
+    dict_res = match_query_or_none(q_text, top_k=2)
     if dict_res:
         return {"searchTerms": dict_res}
 
@@ -110,7 +115,7 @@ def analyze(req: Query):
     min_conf = os.environ.get("MIN_CONFIDENCE")
     min_conf_val = float(min_conf) if min_conf is not None else None
     try:
-        normalized = normalize_query(q.query, min_confidence=min_conf_val)
+        normalized = normalize_query(q_text, min_confidence=min_conf_val)
     except Exception:
         normalized = None
 
@@ -129,7 +134,7 @@ def reload(req: ReloadReq):
     try:
         if req.data_path:
             # attempt to train normalizer from provided data
-            from train_synonym_normalizer import train_and_save
+            from ML.train_synonym_normalizer import train_and_save
             out = train_and_save(Path(req.data_path), out_model=Path("synonym_normalizer.joblib"))
             STATE["normalizer"] = joblib.load(out)
             return {"status": "trained", "out": str(out)}
@@ -152,7 +157,7 @@ def train(req: TrainReq, background_tasks: BackgroundTasks):
     def run_training():
         try:
             from ML.synonym_normalizer import generate_synonym_dataset
-            from train_synonym_normalizer import train_and_save
+            from ML.train_synonym_normalizer import train_and_save
 
             dp = Path(data_path)
             if not dp.exists():
