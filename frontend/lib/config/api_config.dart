@@ -5,5 +5,5 @@ class ApiConfig {
   static String get baseUrl => Env.firebaseBaseUrl;
   
   // API エンドポイント
-  static String get searchFacilitiesEndpoint => '$baseUrl/searchFacilities';
+  static String get searchFacilitiesEndpoint => '$baseUrl/searchByCategory';
 }

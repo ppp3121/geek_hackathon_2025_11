@@ -16,7 +16,7 @@ class FacilityService {
         'lat': center.latitude.toString(),
         'lon': center.longitude.toString(),
         'radius': radius.toString(),
-        'amenities': amenities.join(','),
+        'categories': amenities.join(','),
         if (facilityName != null && facilityName.isNotEmpty)
           'name': facilityName,
       },
