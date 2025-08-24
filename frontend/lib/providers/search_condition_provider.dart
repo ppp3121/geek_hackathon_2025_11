@@ -10,7 +10,7 @@ class SearchCondition {
   const SearchCondition({
     required this.center,
     this.radius = 500.0,
-    this.amenities = const ['restaurant', 'cafe', 'convenience'],
+    this.amenities = const [],
     this.facilityName = '',
   });
 
