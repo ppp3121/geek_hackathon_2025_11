@@ -78,6 +78,14 @@ final facilityCacheProvider = FutureProvider.family<List<Facility>, SearchKey>(
     // 検索成功後にキャッシュクリア判定を実行
     cacheManager.checkAndInvalidateCache(searchKey);
     
+    // 距離順にソート（距離がnullの場合は最後に配置）
+    result.sort((a, b) {
+      if (a.distance == null && b.distance == null) return 0;
+      if (a.distance == null) return 1;
+      if (b.distance == null) return -1;
+      return a.distance!.compareTo(b.distance!);
+    });
+    
     return result;
   },
 );

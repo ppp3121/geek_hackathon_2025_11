@@ -4,6 +4,7 @@ class Facility {
   final double lat;
   final double lon;
   final String category;
+  final double? distance;
 
   const Facility({
     required this.id,
@@ -11,6 +12,7 @@ class Facility {
     required this.lat,
     required this.lon,
     required this.category,
+    this.distance,
   });
 
   factory Facility.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Facility {
       lat: (json['lat'] as num).toDouble(),
       lon: (json['lon'] as num).toDouble(),
       category: json['category'] as String,
+      distance: json['distance'] != null ? (json['distance'] as num).toDouble() : null,
     );
   }
 
@@ -30,6 +33,7 @@ class Facility {
       'lat': lat,
       'lon': lon,
       'category': category,
+      'distance': distance,
     };
   }
 
@@ -44,6 +48,6 @@ class Facility {
 
   @override
   String toString() {
-    return 'Facility(id: $id, name: $name, lat: $lat, lon: $lon, category: $category)';
+    return 'Facility(id: $id, name: $name, lat: $lat, lon: $lon, category: $category, distance: $distance)';
   }
 }

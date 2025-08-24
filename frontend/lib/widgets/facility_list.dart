@@ -280,7 +280,34 @@ class _FacilityListItemState extends State<FacilityListItem>
                 ),
               ],
             ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.facility.distance != null) ...[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.directions_walk,
+                        size: 16,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${widget.facility.distance!.toStringAsFixed(0)}m',
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                const Icon(Icons.arrow_forward_ios, size: 16),
+              ],
+            ),
             onTap: () {
               _showFacilityDetail(context, widget.facility);
             },
@@ -311,6 +338,18 @@ class _FacilityListItemState extends State<FacilityListItem>
                 ],
               ),
               const SizedBox(height: 16),
+              if (facility.distance != null) ...[
+                const Text('距離', style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    const Icon(Icons.directions_walk, size: 16),
+                    const SizedBox(width: 8),
+                    Text('${facility.distance!.toStringAsFixed(0)}m'),
+                  ],
+                ),
+                const SizedBox(height: 16),
+              ],
               const Text('位置情報', style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 4),
               Text('緯度: ${facility.lat.toStringAsFixed(6)}'),

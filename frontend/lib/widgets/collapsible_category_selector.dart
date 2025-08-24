@@ -125,7 +125,6 @@ class _CollapsibleCategorySelectorState
     widget.onCategoriesChanged(newCategories);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -150,11 +149,7 @@ class _CollapsibleCategorySelectorState
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.category,
-                    color: Colors.grey,
-                    size: 20,
-                  ),
+                  const Icon(Icons.category, color: Colors.grey, size: 20),
                   const SizedBox(width: 8),
                   const Expanded(
                     child: Text(
@@ -168,7 +163,9 @@ class _CollapsibleCategorySelectorState
                   if (widget.selectedCategories.isNotEmpty)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -211,10 +208,13 @@ class _CollapsibleCategorySelectorState
                       child: Row(
                         children: _categoryGroups.keys.map((groupName) {
                           final isSelected = _selectedGroup == groupName;
-                          final index = _categoryGroups.keys.toList().indexOf(groupName);
+                          final index = _categoryGroups.keys.toList().indexOf(
+                            groupName,
+                          );
                           final isFirst = index == 0;
-                          final isLast = index == _categoryGroups.keys.length - 1;
-                          
+                          final isLast =
+                              index == _categoryGroups.keys.length - 1;
+
                           return GestureDetector(
                             onTap: () {
                               setState(() {
@@ -222,36 +222,44 @@ class _CollapsibleCategorySelectorState
                               });
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               decoration: BoxDecoration(
-                                color: isSelected 
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.grey.shade100,
+                                color: isSelected
+                                    ? Theme.of(context).primaryColor
+                                    : Colors.grey.shade100,
                                 border: Border(
                                   top: BorderSide(
-                                    color: isSelected 
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.grey.shade300,
+                                    color: isSelected
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.grey.shade300,
                                   ),
                                   bottom: BorderSide(
-                                    color: isSelected 
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.grey.shade300,
+                                    color: isSelected
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.grey.shade300,
                                   ),
-                                  left: isFirst ? BorderSide(
-                                    color: isSelected 
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.grey.shade300,
-                                  ) : BorderSide.none,
+                                  left: isFirst
+                                      ? BorderSide(
+                                          color: isSelected
+                                              ? Theme.of(context).primaryColor
+                                              : Colors.grey.shade300,
+                                        )
+                                      : BorderSide.none,
                                   right: BorderSide(
-                                    color: isSelected 
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.grey.shade300,
+                                    color: isSelected
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.grey.shade300,
                                   ),
                                 ),
                                 borderRadius: BorderRadius.only(
-                                  topLeft: isFirst ? const Radius.circular(8) : Radius.zero,
-                                  topRight: isLast ? const Radius.circular(8) : Radius.zero,
+                                  topLeft: isFirst
+                                      ? const Radius.circular(8)
+                                      : Radius.zero,
+                                  topRight: isLast
+                                      ? const Radius.circular(8)
+                                      : Radius.zero,
                                 ),
                               ),
                               child: Center(
@@ -260,7 +268,9 @@ class _CollapsibleCategorySelectorState
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
-                                    color: isSelected ? Colors.white : Colors.black87,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black87,
                                   ),
                                 ),
                               ),
@@ -290,26 +300,34 @@ class _CollapsibleCategorySelectorState
                       child: Wrap(
                         spacing: 6,
                         runSpacing: 6,
-                        children: _categoryGroups[_selectedGroup]!.entries.map((entry) {
+                        children: _categoryGroups[_selectedGroup]!.entries.map((
+                          entry,
+                        ) {
                           final displayName = entry.key;
                           final apiValue = entry.value;
-                          final isSelected =
-                              widget.selectedCategories.contains(apiValue);
+                          final isSelected = widget.selectedCategories.contains(
+                            apiValue,
+                          );
 
                           return FilterChip(
                             label: Text(
                               displayName,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: isSelected ? Colors.white : Colors.black87,
+                                color: isSelected
+                                    ? Colors.white
+                                    : Colors.black87,
                               ),
                             ),
                             selected: isSelected,
                             onSelected: (_) => _toggleCategory(apiValue),
                             backgroundColor: Colors.grey.shade50,
-                            selectedColor: Theme.of(context).primaryColor.withOpacity(0.9),
+                            selectedColor: Theme.of(
+                              context,
+                            ).primaryColor.withOpacity(0.9),
                             checkmarkColor: Colors.white,
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
                             side: BorderSide(
                               color: isSelected
                                   ? Theme.of(context).primaryColor
