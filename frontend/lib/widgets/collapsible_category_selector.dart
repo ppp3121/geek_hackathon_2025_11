@@ -22,97 +22,68 @@ class _CollapsibleCategorySelectorState
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
 
-  // カテゴリのマップ（表示名 -> API用の値）
-  final Map<String, String> _categories = {
-    // 飲食店
-    'カフェ': 'カフェ',
-    'レストラン': 'レストラン',
-    'ラーメン': 'ラーメン',
-    'うどん': 'うどん',
-    'そば': 'そば',
-    '寿司': '寿司',
-    '焼肉': '焼肉',
-    '焼き鳥': '焼き鳥',
-    '天ぷら': '天ぷら',
-    'とんかつ': 'とんかつ',
-    '丼物': '丼物',
-    'お好み焼き': 'お好み焼き',
-    'ピザ': 'ピザ',
-    'カレー': 'カレー',
-    'ハンバーガー': 'ハンバーガー',
-    '中華料理': '中華料理',
-    '韓国料理': '韓国料理',
-    'タイ料理': 'タイ料理',
-    'ベトナム料理': 'ベトナム料理',
-    'インド料理': 'インド料理',
-    '居酒屋': '居酒屋',
-    'バー': 'バー',
-    
-    // 小売店
-    'コンビニ': 'コンビニ',
-    'スーパーマーケット': 'スーパーマーケット',
-    'デパート': 'デパート',
-    'パン屋': 'パン屋',
-    'ケーキ屋': 'ケーキ屋',
-    '和菓子屋': '和菓子屋',
-    '本屋': '本屋',
-    '文房具店': '文房具店',
-    '服屋': '服屋',
-    '靴屋': '靴屋',
-    'メガネ屋': 'メガネ屋',
-    '家具屋': '家具屋',
-    '雑貨屋': '雑貨屋',
-    '花屋': '花屋',
-    'ホームセンター': 'ホームセンター',
-    '家電量販店': '家電量販店',
-    'ドラッグストア': 'ドラッグストア',
-    'おもちゃ屋': 'おもちゃ屋',
-    'スポーツ用品店': 'スポーツ用品店',
-    '自転車屋': '自転車屋',
-    'ペットショップ': 'ペットショップ',
-    
-    // 医療・健康
-    '薬局': '薬局',
-    '病院': '病院',
-    'クリニック': 'クリニック',
-    '歯科': '歯科',
-    
-    // 金融・郵便
-    '郵便局': '郵便局',
-    '銀行': '銀行',
-    'ATM': 'ATM',
-    
-    // 公共施設
-    '図書館': '図書館',
-    '市役所': '市役所',
-    '警察署': '警察署',
-    '消防署': '消防署',
-    
-    // サービス
-    '駐車場': '駐車場',
-    'コインランドリー': 'コインランドリー',
-    'クリーニング': 'クリーニング',
-    'レンタカー': 'レンタカー',
-    '美容院': '美容院',
-    '理髪店': '理髪店',
-    'ネイルサロン': 'ネイルサロン',
-    
-    // 宿泊
-    'ホテル': 'ホテル',
-    '旅館': '旅館',
-    
-    // 娯楽・レジャー
-    '公園': '公園',
-    '映画館': '映画館',
-    '美術館': '美術館',
-    '博物館': '博物館',
-    'ゲームセンター': 'ゲームセンター',
-    'ボウリング場': 'ボウリング場',
-    'フィットネスジム': 'フィットネスジム',
-    
-    // その他
-    'ガソリンスタンド': 'ガソリンスタンド',
+  // カテゴリを分類別に整理
+  final Map<String, Map<String, String>> _categoryGroups = {
+    '飲食店': {
+      'カフェ': 'カフェ',
+      'レストラン': 'レストラン',
+      'ラーメン': 'ラーメン',
+      'うどん': 'うどん',
+      'そば': 'そば',
+      '寿司': '寿司',
+      '焼肉': '焼肉',
+      '焼き鳥': '焼き鳥',
+      'カレー': 'カレー',
+      'ハンバーガー': 'ハンバーガー',
+      '中華料理': '中華料理',
+      '韓国料理': '韓国料理',
+      '居酒屋': '居酒屋',
+    },
+    'ショッピング': {
+      'コンビニ': 'コンビニ',
+      'スーパーマーケット': 'スーパーマーケット',
+      'デパート': 'デパート',
+      'ドラッグストア': 'ドラッグストア',
+      '本屋': '本屋',
+      '服屋': '服屋',
+      '家電量販店': '家電量販店',
+      'ホームセンター': 'ホームセンター',
+    },
+    '生活サービス': {
+      '銀行': '銀行',
+      'ATM': 'ATM',
+      '郵便局': '郵便局',
+      '美容院': '美容院',
+      '理髪店': '理髪店',
+      'クリーニング': 'クリーニング',
+      'コインランドリー': 'コインランドリー',
+      '駐車場': '駐車場',
+    },
+    '医療・健康': {
+      '病院': '病院',
+      'クリニック': 'クリニック',
+      '歯科': '歯科',
+      '薬局': '薬局',
+      'フィットネスジム': 'フィットネスジム',
+    },
+    '公共施設': {
+      '図書館': '図書館',
+      '市役所': '市役所',
+      '警察署': '警察署',
+      '消防署': '消防署',
+      '公園': '公園',
+    },
+    '娯楽・観光': {
+      '映画館': '映画館',
+      '美術館': '美術館',
+      '博物館': '博物館',
+      'ゲームセンター': 'ゲームセンター',
+      'ボウリング場': 'ボウリング場',
+      'ホテル': 'ホテル',
+    },
   };
+
+  String? _selectedGroup;
 
   @override
   void initState() {
@@ -231,36 +202,88 @@ class _CollapsibleCategorySelectorState
                 children: [
                   const Divider(height: 1),
                   const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: _categories.entries.map((entry) {
-                      final displayName = entry.key;
-                      final apiValue = entry.value;
-                      final isSelected =
-                          widget.selectedCategories.contains(apiValue);
-
-                      return FilterChip(
-                        label: Text(
-                          displayName,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: isSelected ? Colors.white : Colors.black87,
+                  // カテゴリグループのタブ
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _categoryGroups.keys.map((groupName) {
+                        final isSelected = _selectedGroup == groupName;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: FilterChip(
+                            label: Text(
+                              groupName,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: isSelected ? Colors.white : Colors.black87,
+                              ),
+                            ),
+                            selected: isSelected,
+                            onSelected: (_) {
+                              setState(() {
+                                _selectedGroup = isSelected ? null : groupName;
+                              });
+                            },
+                            backgroundColor: Colors.grey.shade200,
+                            selectedColor: Theme.of(context).primaryColor,
+                            checkmarkColor: Colors.white,
+                            side: BorderSide(
+                              color: isSelected
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.grey.shade400,
+                            ),
                           ),
-                        ),
-                        selected: isSelected,
-                        onSelected: (_) => _toggleCategory(apiValue),
-                        backgroundColor: Colors.grey.shade100,
-                        selectedColor: Theme.of(context).primaryColor,
-                        checkmarkColor: Colors.white,
-                        side: BorderSide(
-                          color: isSelected
-                              ? Theme.of(context).primaryColor
-                              : Colors.grey.shade300,
-                        ),
-                      );
-                    }).toList(),
+                        );
+                      }).toList(),
+                    ),
                   ),
+                  const SizedBox(height: 12),
+                  // 選択されたグループのカテゴリ一覧
+                  if (_selectedGroup != null)
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _categoryGroups[_selectedGroup]!.entries.map((entry) {
+                        final displayName = entry.key;
+                        final apiValue = entry.value;
+                        final isSelected =
+                            widget.selectedCategories.contains(apiValue);
+
+                        return FilterChip(
+                          label: Text(
+                            displayName,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isSelected ? Colors.white : Colors.black87,
+                            ),
+                          ),
+                          selected: isSelected,
+                          onSelected: (_) => _toggleCategory(apiValue),
+                          backgroundColor: Colors.grey.shade100,
+                          selectedColor: Theme.of(context).primaryColor,
+                          checkmarkColor: Colors.white,
+                          side: BorderSide(
+                            color: isSelected
+                                ? Theme.of(context).primaryColor
+                                : Colors.grey.shade300,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  // グループが選択されていない場合のメッセージ
+                  if (_selectedGroup == null)
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        '上のカテゴリを選択してください',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                 ],
               ),
             ),
