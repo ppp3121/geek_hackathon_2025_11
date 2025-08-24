@@ -94,11 +94,11 @@ export const searchFacilities = onRequest(
         const mlServiceUrl = "https://facility-search-ml-2mbtkgeqaa-uc.a.run.app/api/v1/analyze-keywords";
 
         try {
-            const mlResponse = await axios.post<{ searchTerms: SearchTerm[] }>(
+            const mlResponse = await axios.post<{ search_terms: SearchTerm[] }>(
                 mlServiceUrl,
-                { query: keyword } // API仕様書通りのリクエストボディ
+                { text: keyword } // API仕様書通りのリクエストボディ
             );
-            searchTerms = mlResponse.data.searchTerms;
+            searchTerms = mlResponse.data.search_terms;
             logger.info("Successfully analyzed keyword", {
                 keyword,
                 searchTerms,
@@ -218,6 +218,146 @@ export const searchFacilities = onRequest(
                     error: "サーバー内部で予期せぬエラーが発生しました。",
                 });
             }
+        }
+    }
+);
+
+import { parse } from "csv-parse/sync";
+import * as fs from "fs";
+import * as path from "path";
+
+// --- カテゴリ検索用の辞書を準備 ---
+// CSVから読み込んだデータを保持するための型を定義
+interface CategoryDict {
+    [categoryName: string]: SearchTerm[];
+}
+
+// CSVファイルを読み込んで、カテゴリ辞書を作成する
+const loadCategoryDictionary = (): CategoryDict => {
+    const csvFilePath = path.join(__dirname, "..", "osm_dictionary.csv");
+    const fileContent = fs.readFileSync(csvFilePath, { encoding: "utf-8" });
+
+    // csv-parseを使ってCSVをパース
+    const records = parse(fileContent, {
+        columns: true, // 1行目をヘッダーとして扱う
+        skip_empty_lines: true,
+    });
+
+    const dictionary: CategoryDict = {};
+
+    type CsvRecord = {
+        text: string;
+        tags: string;
+    };
+
+    for (const record of records as CsvRecord[]) {
+        try {
+            const tagsString = record.tags.replace(/""/g, '"');
+            dictionary[record.text] = JSON.parse(tagsString);
+        } catch (e) {
+            logger.error(`Failed to parse tags for category: ${record.text}`, e);
+        }
+    }
+
+    logger.info("Category dictionary loaded successfully.");
+    return dictionary;
+};
+
+// Cloud Functionsのインスタンス起動時に一度だけ辞書を読み込む
+const categoryDictionary = loadCategoryDictionary();
+
+
+// ========================================================================
+// ★★★ 新しいカテゴリ検索API ★★★
+// ========================================================================
+export const searchByCategory = onRequest(
+    { region: "us-central1" },
+    async (request, response) => {
+        // CORSを許可
+        response.set("Access-Control-Allow-Origin", "*");
+        response.set("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, POST");
+        response.set("Access-Control-Allow-Headers", "Content-Type");
+
+        if (request.method === "OPTIONS") {
+            response.status(204).send("");
+            return;
+        }
+
+        logger.info("Category search request received!");
+
+        // --- 1. リクエストからパラメータを取得・バリデーション ---
+        const lat = parseFloat(request.query.lat as string);
+        const lon = parseFloat(request.query.lon as string);
+        const radius = parseInt(request.query.radius as string) || 1000;
+        const categoriesQuery = request.query.categories as string;
+
+        if (isNaN(lat) || isNaN(lon)) {
+            response.status(400).json({ error: "緯度(lat)と経度(lon)は必須です。" });
+            return;
+        }
+        if (!categoriesQuery) {
+            response.status(400).json({ error: "カテゴリ(categories)は必須です。" });
+            return;
+        }
+
+        // カンマ区切りのカテゴリ名を配列に変換
+        const selectedCategories = categoriesQuery.split(',');
+
+        try {
+            // --- 2. 各カテゴリに対応する検索条件を辞書から取得 ---
+            const allSearchTerms: SearchTerm[][] = [];
+            for (const category of selectedCategories) {
+                if (categoryDictionary[category]) {
+                    allSearchTerms.push(categoryDictionary[category]);
+                }
+            }
+
+            if (allSearchTerms.length === 0) {
+                response.status(200).json([]); // 有効なカテゴリが一つもなければ空の配列を返す
+                return;
+            }
+
+            // --- 3. 複数カテゴリをOR検索するためのOverpassクエリを生成 ---
+            const searchBlocks = allSearchTerms.map(terms => {
+                const filters = terms.map(term => `["${term.key}"="${term.value}"]`).join("");
+                return `
+          node(around:${radius},${lat},${lon})${filters};
+          way(around:${radius},${lat},${lon})${filters};
+          relation(around:${radius},${lat},${lon})${filters};
+        `;
+            }).join("\n");
+
+            const overpassQuery = `
+        [out:json][timeout:25];
+        (
+          ${searchBlocks}
+        );
+        out center;
+      `;
+
+            // --- 4. Overpass APIを呼び出し、結果を整形して返す ---
+            const overpassUrl = "https://overpass-api.de/api/interpreter";
+            const overpassResponse = await axios.post(overpassUrl, overpassQuery, {
+                headers: { "Content-Type": "text/plain" },
+            });
+
+            // Facility型は、searchFacilities関数で使っているものを再利用
+            const facilities: Facility[] = overpassResponse.data.elements.map((element: any): Facility => {
+                const tags = element.tags || {};
+                return {
+                    id: element.id,
+                    lat: element.center?.lat || element.lat,
+                    lon: element.center?.lon || element.lon,
+                    name: tags.name || "名称未設定",
+                    category: tags.cuisine || tags.amenity || tags.shop || "その他",
+                };
+            });
+
+            response.status(200).json(facilities);
+
+        } catch (error) {
+            logger.error("An error occurred in searchByCategory:", error);
+            response.status(500).json({ error: "An unexpected error occurred." });
         }
     }
 );
