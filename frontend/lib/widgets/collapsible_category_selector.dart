@@ -125,6 +125,7 @@ class _CollapsibleCategorySelectorState
     widget.onCategoriesChanged(newCategories);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -202,88 +203,124 @@ class _CollapsibleCategorySelectorState
                 children: [
                   const Divider(height: 1),
                   const SizedBox(height: 8),
-                  // カテゴリグループのタブ
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: _categoryGroups.keys.map((groupName) {
-                        final isSelected = _selectedGroup == groupName;
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: FilterChip(
-                            label: Text(
-                              groupName,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                color: isSelected ? Colors.white : Colors.black87,
-                              ),
-                            ),
-                            selected: isSelected,
-                            onSelected: (_) {
+                  // タブ形式の大カテゴリ選択
+                  Container(
+                    height: 40,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: _categoryGroups.keys.map((groupName) {
+                          final isSelected = _selectedGroup == groupName;
+                          final index = _categoryGroups.keys.toList().indexOf(groupName);
+                          final isFirst = index == 0;
+                          final isLast = index == _categoryGroups.keys.length - 1;
+                          
+                          return GestureDetector(
+                            onTap: () {
                               setState(() {
                                 _selectedGroup = isSelected ? null : groupName;
                               });
                             },
-                            backgroundColor: Colors.grey.shade200,
-                            selectedColor: Theme.of(context).primaryColor,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                color: isSelected 
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.grey.shade100,
+                                border: Border(
+                                  top: BorderSide(
+                                    color: isSelected 
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey.shade300,
+                                  ),
+                                  bottom: BorderSide(
+                                    color: isSelected 
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey.shade300,
+                                  ),
+                                  left: isFirst ? BorderSide(
+                                    color: isSelected 
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey.shade300,
+                                  ) : BorderSide.none,
+                                  right: BorderSide(
+                                    color: isSelected 
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey.shade300,
+                                  ),
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: isFirst ? const Radius.circular(8) : Radius.zero,
+                                  topRight: isLast ? const Radius.circular(8) : Radius.zero,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  groupName,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: isSelected ? Colors.white : Colors.black87,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  // 選択されたグループのカテゴリ一覧
+                  if (_selectedGroup != null) ...[
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                          left: BorderSide(color: Colors.grey.shade300),
+                          right: BorderSide(color: Colors.grey.shade300),
+                          bottom: BorderSide(color: Colors.grey.shade300),
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                      ),
+                      child: Wrap(
+                        spacing: 6,
+                        runSpacing: 6,
+                        children: _categoryGroups[_selectedGroup]!.entries.map((entry) {
+                          final displayName = entry.key;
+                          final apiValue = entry.value;
+                          final isSelected =
+                              widget.selectedCategories.contains(apiValue);
+
+                          return FilterChip(
+                            label: Text(
+                              displayName,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: isSelected ? Colors.white : Colors.black87,
+                              ),
+                            ),
+                            selected: isSelected,
+                            onSelected: (_) => _toggleCategory(apiValue),
+                            backgroundColor: Colors.grey.shade50,
+                            selectedColor: Theme.of(context).primaryColor.withOpacity(0.9),
                             checkmarkColor: Colors.white,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             side: BorderSide(
                               color: isSelected
                                   ? Theme.of(context).primaryColor
-                                  : Colors.grey.shade400,
+                                  : Colors.grey.shade300,
+                              width: 1,
                             ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // 選択されたグループのカテゴリ一覧
-                  if (_selectedGroup != null)
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: _categoryGroups[_selectedGroup]!.entries.map((entry) {
-                        final displayName = entry.key;
-                        final apiValue = entry.value;
-                        final isSelected =
-                            widget.selectedCategories.contains(apiValue);
-
-                        return FilterChip(
-                          label: Text(
-                            displayName,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: isSelected ? Colors.white : Colors.black87,
-                            ),
-                          ),
-                          selected: isSelected,
-                          onSelected: (_) => _toggleCategory(apiValue),
-                          backgroundColor: Colors.grey.shade100,
-                          selectedColor: Theme.of(context).primaryColor,
-                          checkmarkColor: Colors.white,
-                          side: BorderSide(
-                            color: isSelected
-                                ? Theme.of(context).primaryColor
-                                : Colors.grey.shade300,
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  // グループが選択されていない場合のメッセージ
-                  if (_selectedGroup == null)
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        '上のカテゴリを選択してください',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.shade600,
-                        ),
-                        textAlign: TextAlign.center,
+                          );
+                        }).toList(),
                       ),
                     ),
+                  ],
                 ],
               ),
             ),
