@@ -6,11 +6,13 @@ import '../providers/facility_cache_provider.dart';
 class FacilityList extends ConsumerStatefulWidget {
   final String? highlightedFacilityId;
   final ScrollController? scrollController;
+  final Function(Facility facility)? onFacilityTapped;
 
   const FacilityList({
     super.key,
     this.highlightedFacilityId,
     this.scrollController,
+    this.onFacilityTapped,
   });
 
   @override
@@ -183,6 +185,7 @@ class _FacilityListState extends ConsumerState<FacilityList> {
             return FacilityListItem(
               facility: facility,
               isHighlighted: isHighlighted,
+              onTap: widget.onFacilityTapped,
             );
           },
         );
@@ -194,11 +197,13 @@ class _FacilityListState extends ConsumerState<FacilityList> {
 class FacilityListItem extends StatefulWidget {
   final Facility facility;
   final bool isHighlighted;
+  final Function(Facility facility)? onTap;
 
   const FacilityListItem({
     super.key,
     required this.facility,
     this.isHighlighted = false,
+    this.onTap,
   });
 
   @override
@@ -269,17 +274,7 @@ class _FacilityListItemState extends State<FacilityListItem>
               widget.facility.name,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(_getCategoryDisplayName(widget.facility.category)),
-                const SizedBox(height: 2),
-                Text(
-                  '${widget.facility.lat.toStringAsFixed(4)}, ${widget.facility.lon.toStringAsFixed(4)}',
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                ),
-              ],
-            ),
+            subtitle: Text(_getCategoryDisplayName(widget.facility.category)),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -309,7 +304,11 @@ class _FacilityListItemState extends State<FacilityListItem>
               ],
             ),
             onTap: () {
-              _showFacilityDetail(context, widget.facility);
+              if (widget.onTap != null) {
+                widget.onTap!(widget.facility);
+              } else {
+                _showFacilityDetail(context, widget.facility);
+              }
             },
           ),
         );
@@ -350,10 +349,6 @@ class _FacilityListItemState extends State<FacilityListItem>
                 ),
                 const SizedBox(height: 16),
               ],
-              const Text('位置情報', style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 4),
-              Text('緯度: ${facility.lat.toStringAsFixed(6)}'),
-              Text('経度: ${facility.lon.toStringAsFixed(6)}'),
             ],
           ),
           actions: [
@@ -401,6 +396,7 @@ class _FacilityListItemState extends State<FacilityListItem>
       case 'restaurant':
         return Icons.restaurant;
       case 'cafe':
+      case 'coffee_shop':
         return Icons.local_cafe;
       case 'convenience':
         return Icons.store;
@@ -413,11 +409,59 @@ class _FacilityListItemState extends State<FacilityListItem>
       case 'atm':
         return Icons.atm;
       case 'gas_station':
+      case 'fuel':
         return Icons.local_gas_station;
       case 'parking':
         return Icons.local_parking;
       case 'school':
         return Icons.school;
+      case 'fast_food':
+        return Icons.fastfood;
+      case 'bar':
+      case 'pub':
+        return Icons.local_bar;
+      case 'bakery':
+        return Icons.bakery_dining;
+      case 'supermarket':
+      case 'shop':
+        return Icons.shopping_cart;
+      case 'department_store':
+      case 'mall':
+        return Icons.shopping_bag;
+      case 'library':
+        return Icons.local_library;
+      case 'post_office':
+        return Icons.local_post_office;
+      case 'police':
+        return Icons.local_police;
+      case 'fire_station':
+        return Icons.local_fire_department;
+      case 'townhall':
+        return Icons.account_balance;
+      case 'dentist':
+      case 'clinic':
+        return Icons.medical_services;
+      case 'veterinary':
+        return Icons.pets;
+      case 'beauty_salon':
+      case 'hairdresser':
+        return Icons.content_cut;
+      case 'gym':
+      case 'fitness_centre':
+        return Icons.fitness_center;
+      case 'swimming_pool':
+        return Icons.pool;
+      case 'cinema':
+        return Icons.local_movies;
+      case 'theatre':
+        return Icons.theater_comedy;
+      case 'museum':
+        return Icons.museum;
+      case 'hotel':
+      case 'motel':
+      case 'hostel':
+      case 'guest_house':
+        return Icons.hotel;
       default:
         return Icons.place;
     }
@@ -429,6 +473,8 @@ class _FacilityListItemState extends State<FacilityListItem>
         return 'レストラン';
       case 'cafe':
         return 'カフェ';
+      case 'coffee_shop':
+        return 'コーヒーショップ';
       case 'convenience':
         return 'コンビニ';
       case 'hospital':
@@ -445,6 +491,68 @@ class _FacilityListItemState extends State<FacilityListItem>
         return '駐車場';
       case 'school':
         return '学校';
+      case 'fast_food':
+        return 'ファストフード';
+      case 'bar':
+        return 'バー';
+      case 'pub':
+        return 'パブ';
+      case 'food_court':
+        return 'フードコート';
+      case 'ice_cream':
+        return 'アイスクリーム店';
+      case 'bakery':
+        return 'ベーカリー';
+      case 'supermarket':
+        return 'スーパーマーケット';
+      case 'shop':
+        return 'ショップ';
+      case 'department_store':
+        return 'デパート';
+      case 'mall':
+        return 'ショッピングモール';
+      case 'fuel':
+        return 'ガソリンスタンド';
+      case 'library':
+        return '図書館';
+      case 'post_office':
+        return '郵便局';
+      case 'police':
+        return '警察署';
+      case 'fire_station':
+        return '消防署';
+      case 'townhall':
+        return '市役所';
+      case 'dentist':
+        return '歯科';
+      case 'clinic':
+        return 'クリニック';
+      case 'veterinary':
+        return '動物病院';
+      case 'beauty_salon':
+        return '美容院';
+      case 'hairdresser':
+        return '理髪店';
+      case 'gym':
+        return 'ジム';
+      case 'fitness_centre':
+        return 'フィットネスセンター';
+      case 'swimming_pool':
+        return 'プール';
+      case 'cinema':
+        return '映画館';
+      case 'theatre':
+        return '劇場';
+      case 'museum':
+        return '美術館・博物館';
+      case 'hotel':
+        return 'ホテル';
+      case 'motel':
+        return 'モーテル';
+      case 'hostel':
+        return 'ホステル';
+      case 'guest_house':
+        return 'ゲストハウス';
       default:
         return category;
     }

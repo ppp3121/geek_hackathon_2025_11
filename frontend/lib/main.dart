@@ -8,6 +8,7 @@ import 'widgets/collapsible_category_selector.dart';
 import 'widgets/resizable_result_panel.dart';
 import 'providers/search_condition_provider.dart';
 import 'providers/result_panel_provider.dart';
+import 'models/facility.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -38,6 +39,7 @@ class MyHomePage extends ConsumerStatefulWidget {
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
   String? _highlightedFacilityId;
+  final GlobalKey<MapWidgetState> _mapKey = GlobalKey<MapWidgetState>();
 
   void _handleSearch(String query) {
     // TODO: 自然言語検索の実装
@@ -74,6 +76,16 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     });
   }
 
+  void _handleFacilityCardTapped(Facility facility) {
+    // 地図上の施設にフォーカス
+    _mapKey.focusOnFacility(facility);
+    
+    // 結果パネルを省略表示に移行
+    ref.read(resultPanelProvider.notifier).showFromMinimal();
+    
+    print('店舗カードがタップされました: ${facility.name}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return ErrorHandler(
@@ -82,7 +94,10 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           children: [
             // マップエリア
             Positioned.fill(
-              child: MapWidget(onFacilityTapped: _handleFacilityTapped),
+              child: MapWidget(
+                key: _mapKey,
+                onFacilityTapped: _handleFacilityTapped,
+              ),
             ),
             // 検索バーとカテゴリセレクター（背面）
             Positioned(
@@ -114,6 +129,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               bottom: 0,
               child: ResizableResultPanel(
                 highlightedFacilityId: _highlightedFacilityId,
+                onFacilityTapped: _handleFacilityCardTapped,
               ),
             ),
           ],

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/result_panel_provider.dart';
+import '../models/facility.dart';
 import 'facility_list.dart';
 
 class ResizableResultPanel extends ConsumerStatefulWidget {
   final String? highlightedFacilityId;
+  final Function(Facility facility)? onFacilityTapped;
 
   const ResizableResultPanel({
     super.key,
     this.highlightedFacilityId,
+    this.onFacilityTapped,
   });
 
   @override
@@ -143,6 +146,7 @@ class _ResizableResultPanelState extends ConsumerState<ResizableResultPanel>
                 child: FacilityList(
                   highlightedFacilityId: widget.highlightedFacilityId,
                   scrollController: _scrollController,
+                  onFacilityTapped: widget.onFacilityTapped,
                 ),
               ),
           ],

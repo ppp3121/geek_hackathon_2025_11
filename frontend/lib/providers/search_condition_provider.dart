@@ -32,7 +32,7 @@ class SearchCondition {
 class SearchConditionNotifier extends StateNotifier<SearchCondition> {
   SearchConditionNotifier()
       : super(const SearchCondition(
-          center: LatLng(35.6762, 139.6503), // 東京駅を初期位置として設定
+          center: LatLng(34.960165, 137.071687), // 名古屋市を初期位置として設定
         ));
 
   void updateCenter(LatLng newCenter) {

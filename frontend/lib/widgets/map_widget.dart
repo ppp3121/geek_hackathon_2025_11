@@ -13,12 +13,63 @@ class MapWidget extends ConsumerStatefulWidget {
   const MapWidget({super.key, this.onFacilityTapped});
 
   @override
-  ConsumerState<MapWidget> createState() => _MapWidgetState();
+  ConsumerState<MapWidget> createState() => MapWidgetState();
 }
 
-class _MapWidgetState extends ConsumerState<MapWidget> {
+extension MapWidgetExtension on GlobalKey<MapWidgetState> {
+  void focusOnFacility(Facility facility) {
+    currentState?.focusOnFacility(facility);
+  }
+}
+
+class MapWidgetState extends ConsumerState<MapWidget> {
   final MapController _mapController = MapController();
   List<Facility> _lastFacilities = [];
+  String? _highlightedFacilityId;
+
+  void focusOnFacility(Facility facility) {
+    setState(() {
+      _highlightedFacilityId = facility.id.toString();
+    });
+
+    // カスタムアニメーションで滑らかに移動
+    _animateToLocation(LatLng(facility.lat, facility.lon), 17.0);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          _highlightedFacilityId = null;
+        });
+      }
+    });
+  }
+
+  void _animateToLocation(LatLng target, double targetZoom) {
+    final currentCenter = _mapController.camera.center;
+    final currentZoom = _mapController.camera.zoom;
+    
+    const duration = Duration(milliseconds: 1000);
+    const steps = 30;
+    const stepDuration = Duration(milliseconds: 33); // 30fps相当
+
+    for (int i = 1; i <= steps; i++) {
+      final progress = i / steps;
+      final easedProgress = Curves.easeInOut.transform(progress);
+      
+      final lat = currentCenter.latitude + 
+          (target.latitude - currentCenter.latitude) * easedProgress;
+      final lng = currentCenter.longitude + 
+          (target.longitude - currentCenter.longitude) * easedProgress;
+      final zoom = currentZoom + 
+          (targetZoom - currentZoom) * easedProgress;
+
+      Future.delayed(stepDuration * i, () {
+        if (mounted) {
+          _mapController.move(LatLng(lat, lng), zoom);
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +128,12 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
                             decoration: BoxDecoration(
                               color: _getCategoryColor(facility.category),
                               shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
+                              border: Border.all(
+                                color: _highlightedFacilityId == facility.id.toString()
+                                    ? Colors.yellow
+                                    : Colors.white,
+                                width: _highlightedFacilityId == facility.id.toString() ? 4 : 2,
+                              ),
                             ),
                             child: Icon(
                               _getCategoryIcon(facility.category),
@@ -145,7 +201,12 @@ class _MapWidgetState extends ConsumerState<MapWidget> {
                             decoration: BoxDecoration(
                               color: _getCategoryColor(facility.category),
                               shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
+                              border: Border.all(
+                                color: _highlightedFacilityId == facility.id.toString()
+                                    ? Colors.yellow
+                                    : Colors.white,
+                                width: _highlightedFacilityId == facility.id.toString() ? 4 : 2,
+                              ),
                             ),
                             child: Icon(
                               _getCategoryIcon(facility.category),
