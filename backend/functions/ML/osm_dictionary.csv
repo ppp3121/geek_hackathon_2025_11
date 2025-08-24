@@ -24,6 +24,7 @@ text,tags
 "インド料理","[{""key"": ""amenity"", ""value"": ""restaurant""}, {""key"": ""cuisine"", ""value"": ""indian""}]"
 "スペイン料理","[{""key"": ""amenity"", ""value"": ""restaurant""}, {""key"": ""cuisine"", ""value"": ""spanish""}]"
 "メキシコ料理","[{""key"": ""amenity"", ""value"": ""restaurant""}, {""key"": ""cuisine"", ""value"": ""mexican""}]"
+"ネパール料理","[{""key"": ""amenity"", ""value"": ""restaurant""}, {""key"": ""cuisine"", ""value"": ""nepalese""}]"
 "居酒屋","[{""key"": ""amenity"", ""value"": ""bar""}]"
 "バー","[{""key"": ""amenity"", ""value"": ""bar""}]"
 "パブ","[{""key"": ""amenity"", ""value"": ""pub""}]"
