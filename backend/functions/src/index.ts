@@ -9,6 +9,7 @@ interface Facility {
     lat: number;
     lon: number;
     category: string;
+    distance: number | null;
 }
 
 // Overpass APIのレスポンスの要素の型を定義
@@ -36,6 +37,14 @@ interface OverpassResponse {
 interface SearchTerm {
     key: string;
     value: string;
+}
+
+interface OsrmResponse {
+    code: string;
+    routes: {
+        distance: number; // 距離 (メートル)
+        duration: number; // 時間 (秒)
+    }[];
 }
 
 /**
@@ -167,6 +176,7 @@ export const searchFacilities = onRequest(
                         lat: facilityLat,
                         lon: facilityLon,
                         category: elem.tags?.cuisine ?? elem.tags?.amenity ?? "unknown", // amenityタグをカテゴリとして利用
+                        distance: null, // 距離は後でOSRM APIで計算してセットする
                     };
                 });
 
@@ -266,10 +276,44 @@ const loadCategoryDictionary = (): CategoryDict => {
 // Cloud Functionsのインスタンス起動時に一度だけ辞書を読み込む
 const categoryDictionary = loadCategoryDictionary();
 
+/**
+ * 複数の施設までの距離をOSRM APIで並列に計算し、施設情報に付与する関数
+ * @param userLat ユーザーの緯度
+ * @param userLon ユーザーの経度
+ * @param facilities 距離を計算したい施設の配列
+ * @returns 距離情報(distance)が付与された施設の配列
+ */
+const calculateDistances = async (userLat: number, userLon: number, facilities: Omit<Facility, "distance">[]): Promise<Facility[]> => {
+    const osrmBaseUrl = "http://router.project-osrm.org/route/v1/driving/";
 
-// ========================================================================
-// ★★★ 新しいカテゴリ検索API ★★★
-// ========================================================================
+    // 各施設への距離計算リクエストをプロミスの配列として作成
+    const distancePromises = facilities.map(async (facility) => {
+        const coords = `${userLon},${userLat};${facility.lon},${facility.lat}`;
+        const url = `${osrmBaseUrl}${coords}?overview=false`;
+
+        try {
+            const response = await axios.get<OsrmResponse>(url);
+            if (response.data.code === "Ok" && response.data.routes.length > 0) {
+                // 成功した場合は距離(メートル)をセット
+                return {
+                    ...facility,
+                    distance: response.data.routes[0].distance,
+                };
+            }
+        } catch (error) {
+            logger.error(`Failed to fetch distance for facility ${facility.id}`, { url, error });
+        }
+        // 失敗した場合はdistanceをnullとして返す
+        return {
+            ...facility,
+            distance: null,
+        };
+    });
+
+    // Promise.allですべてのリクエストを並列実行
+    return Promise.all(distancePromises);
+};
+
 export const searchByCategory = onRequest(
     { region: "us-central1" },
     async (request, response) => {
@@ -342,22 +386,47 @@ export const searchByCategory = onRequest(
             });
 
             // Facility型は、searchFacilities関数で使っているものを再利用
-            const facilities: Facility[] = overpassResponse.data.elements.map((element: any): Facility => {
-                const tags = element.tags || {};
-                return {
-                    id: element.id,
-                    lat: element.center?.lat || element.lat,
-                    lon: element.center?.lon || element.lon,
-                    name: tags.name || "名称未設定",
-                    category: tags.cuisine || tags.amenity || tags.shop || "その他",
-                };
+            const facilitiesFromOverpass: Omit<Facility, "distance">[] = overpassResponse.data.elements
+                .filter((element: OverpassElement): element is OverpassElement & { tags: { name: string } } =>
+                    !!element.tags?.name && (!!element.lat || !!element.center)
+                )
+                .map((element: OverpassElement): Omit<Facility, "distance"> => {
+                    const tags = element.tags || {};
+                    return {
+                        id: element.id,
+                        lat: element.center?.lat ?? element.lat!,
+                        lon: element.center?.lon ?? element.lon!,
+                        name: tags.name || "名称未設定",
+                        category: tags.cuisine || tags.amenity || "その他",
+                    };
+                });
+
+            if (facilitiesFromOverpass.length === 0) {
+                response.status(200).json([]);
+                return;
+            }
+
+            const facilitiesWithDistance = await calculateDistances(lat, lon, facilitiesFromOverpass);
+
+            facilitiesWithDistance.sort((a, b) => {
+                if (a.distance === null) return 1;
+                if (b.distance === null) return -1;
+                return a.distance - b.distance;
             });
 
-            response.status(200).json(facilities);
+            response.status(200).json(facilitiesWithDistance);
 
         } catch (error) {
-            logger.error("An error occurred in searchByCategory:", error);
-            response.status(500).json({ error: "An unexpected error occurred." });
+            if (isAxiosError(error)) {
+                logger.error("Axios error in searchByCategory:", {
+                    message: error.message,
+                    code: error.code,
+                    response: error.response?.data,
+                });
+            } else {
+                logger.error("An unexpected error occurred in searchByCategory:", error);
+            }
+            response.status(500).json({ error: "サーバー処理中にエラーが発生しました。" });
         }
     }
 );
