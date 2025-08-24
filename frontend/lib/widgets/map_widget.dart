@@ -74,7 +74,7 @@ class MapWidgetState extends ConsumerState<MapWidget> {
   @override
   Widget build(BuildContext context) {
     final searchCondition = ref.watch(searchConditionProvider);
-    final facilitiesAsync = ref.watch(currentFacilitiesProvider);
+    final facilitiesAsync = ref.watch(optimizedFacilitiesProvider);
 
     return FlutterMap(
       mapController: _mapController,

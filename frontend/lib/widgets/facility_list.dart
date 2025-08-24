@@ -84,7 +84,7 @@ class _FacilityListState extends ConsumerState<FacilityList> {
 
   @override
   Widget build(BuildContext context) {
-    final facilitiesAsync = ref.watch(currentFacilitiesProvider);
+    final facilitiesAsync = ref.watch(optimizedFacilitiesProvider);
 
     return facilitiesAsync.when(
       loading: () => const Center(
@@ -121,7 +121,7 @@ class _FacilityListState extends ConsumerState<FacilityList> {
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: () {
-                ref.invalidate(currentFacilitiesProvider);
+                ref.invalidate(optimizedFacilitiesProvider);
               },
               icon: const Icon(Icons.refresh),
               label: const Text('再試行'),
@@ -159,7 +159,7 @@ class _FacilityListState extends ConsumerState<FacilityList> {
                 const SizedBox(height: 24),
                 OutlinedButton.icon(
                   onPressed: () {
-                    ref.invalidate(currentFacilitiesProvider);
+                    ref.invalidate(optimizedFacilitiesProvider);
                   },
                   icon: const Icon(Icons.refresh),
                   label: const Text('再検索'),
