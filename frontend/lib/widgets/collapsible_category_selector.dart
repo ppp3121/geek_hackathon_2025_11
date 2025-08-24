@@ -84,7 +84,7 @@ class _CollapsibleCategorySelectorState
     },
   };
 
-  String? _selectedGroup;
+  String? _selectedGroup = '飲食店';
 
   @override
   void initState() {
