@@ -11,7 +11,7 @@
 
 from __future__ import annotations
 from typing import Optional, List, Dict
-from .dictionary import KEYWORD_TO_TAGS
+from dictionary import KEYWORD_TO_TAGS
 
 
 def normalize_text(s: str) -> str:

@@ -6,3 +6,5 @@ huggingface-hub
 fugashi[unidic-lite]
 scikit-learn
 google-cloud-storage
+sentence-transformers
+torch

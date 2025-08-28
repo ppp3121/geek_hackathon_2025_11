@@ -1,1 +1,25 @@
 venv/
+
+# Large ML artifacts (prevent accidental commits)
+*.pt
+*.bin
+*.safetensors
+*.onnx
+*.h5
+*.ckpt
+*.pickle
+*.pkl
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# Local model output dirs
+add_data_text_model
+backend/functions/ML/transformer_model/
+backend/functions/ML/.cache/
+backend/functions/ML/__pycache__/
+backend/functions/ML/tools/
+backend/functions/ML/synonym_training_augmented.jsonl
+backend/functions/ML/training_data.jsonl
+backend/functions/ML/synonym_normalizer.joblib
