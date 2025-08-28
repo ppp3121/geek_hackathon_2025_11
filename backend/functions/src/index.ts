@@ -1,6 +1,8 @@
 import { onRequest } from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
 import axios, { isAxiosError } from "axios";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 // フロントエンドに返す施設のデータ構造をinterfaceで定義
 interface Facility {
@@ -100,7 +102,11 @@ export const searchFacilities = onRequest(
 
         // MLサービスを呼び出してキーワードを解析
         let searchTerms: SearchTerm[] = [];
-        const mlServiceUrl = "https://facility-search-ml-2mbtkgeqaa-uc.a.run.app/api/v1/analyze-keywords";
+        const mlServiceUrl = process.env.ML_SERVICE_URL;
+        if (!mlServiceUrl) {
+            response.status(500).json({ error: "ML_SERVICE_URLが設定されていません。" });
+            return;
+        }
 
         try {
             const mlResponse = await axios.post<{ search_terms: SearchTerm[] }>(
@@ -148,7 +154,11 @@ export const searchFacilities = onRequest(
       out center;
     `;
 
-        const overpassUrl = "https://overpass-api.de/api/interpreter";
+        const overpassUrl = process.env.OVERPASS_API_URL;
+        if (!overpassUrl) {
+            response.status(500).json({ error: "OVERPASS_API_URLが設定されていません。" });
+            return;
+        }
 
         try {
             const apiResponse = await axios.post<OverpassResponse>(
