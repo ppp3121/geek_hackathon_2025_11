@@ -11,21 +11,36 @@ class FacilityService {
     required List<String> amenities,
     String? facilityName,
   }) async {
-    final uri = Uri.parse(ApiConfig.searchFacilitiesEndpoint).replace(
-      queryParameters: {
-        'lat': center.latitude.toString(),
-        'lon': center.longitude.toString(),
-        'radius': radius.toString(),
-        'categories': amenities.join(','),
-        if (facilityName != null && facilityName.isNotEmpty)
-          'name': facilityName,
-      },
-    );
+    Uri uri;
+    if (amenities.isNotEmpty) {
+      // カテゴリ検索
+      uri = Uri.parse(ApiConfig.searchByCategoryEndpoint).replace(
+        queryParameters: {
+          'lat': center.latitude.toString(),
+          'lon': center.longitude.toString(),
+          'radius': radius.toString(),
+          'categories': amenities.join(','),
+        },
+      );
+    } else if (facilityName != null && facilityName.isNotEmpty) {
+      // キーワード検索
+      uri = Uri.parse(ApiConfig.searchKeywordsEndpoint).replace(
+        queryParameters: {
+          'lat': center.latitude.toString(),
+          'lon': center.longitude.toString(),
+          'radius': radius.toString(),
+          'keyword': facilityName,
+        },
+      );
+    } else {
+      // 検索条件がない場合は空リストを返す
+      return Future.value([]);
+    }
 
     try {
-      final response = await http
-          .get(uri, headers: {'Content-Type': 'application/json'})
-          .timeout(const Duration(seconds: 30));
+      final response = await http.get(uri, headers: {
+        'Content-Type': 'application/json'
+      }).timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonList = json.decode(response.body) as List;
