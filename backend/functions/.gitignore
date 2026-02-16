@@ -16,3 +16,23 @@ data/
 archive/
 deploy/
 ML/transformer_model/
+
+# --- ML: training/evaluation artifacts (do not push) ---
+ML/*training*.jsonl
+ML/augmented_training_data.jsonl
+ML/enhanced_training_data.jsonl
+ML/synonym_normalizer.joblib
+
+# eval / experiment scripts
+ML/evaluate_*.py
+ML/compare_performance.py
+
+# training-only scripts and outputs
+ML/tools/train/
+ML/tools/demos/
+ML/tools/synonym_training*.jsonl
+ML/tools/*.joblib
+
+# local NER model/checkpoints (if created locally)
+ML/ner_model/
+ML/**/checkpoint-*/
